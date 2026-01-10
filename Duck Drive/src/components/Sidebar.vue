@@ -1,5 +1,6 @@
-<script start>
-import IconCommunity from './icons/IconCommunity.vue';
+<!--TODO: Lägga till api-anrop vid klick på button för uppladdning-->
+
+<script setup>
 </script>
 <template>
     <aside class="sidebar">
