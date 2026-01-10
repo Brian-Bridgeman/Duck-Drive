@@ -26,6 +26,7 @@
     </aside>
 </template>
 <style scoped>
+    /*stylingen för sidebar kan vi justera senare, bara lagt in grundläggande */
 .sidebar {
     width: 200px;
     background-color: #f5f5f5;
