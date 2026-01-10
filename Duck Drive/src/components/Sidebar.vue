@@ -1,11 +1,15 @@
 <!--TODO: Lägga till api-anrop vid klick på button för uppladdning-->
 
 <script setup>
+    function uploadFile() {
+        console.log("Upload file clicked");
+        //placeholder för uppladdningsknapp, fetch läggs häår senare
+    }
 </script>
 <template>
     <aside class="sidebar">
-        <IconCommunity />
-        <button class="new-button">+ Nytt</button>
+        <h1>Duck Drive</h1>
+        <button class="new-button" @click="uploadFile">+ Nytt</button>
         <nav>
             <ul>
                 <li><a href="#">Startsida</a></li>
