@@ -1,5 +1,4 @@
 <script start>
-    import { ref } from 'vue';
 import IconCommunity from './icons/IconCommunity.vue';
 </script>
 <template>
