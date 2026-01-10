@@ -1,27 +1,38 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from "vue";
 
-const files=ref([
-    { id: 1, name: 'duck.txt' , date: '2026-01-10'}, //
-    { id: 2, name: 'quack.mp3', date: '2026-01-10' },//
-    { id: 3, name: 'quack.jpg', date: '2026-01-10' } //radera dessa när vi gjort api-anrop, bara för att visa något
-]);
+const files = ref([]);
 
-function fetchFiles() {
-    //TODO: lägga till api-anrop för att hämta filer
+async function fetchFiles() {
+  try {
+    const response = await fetch("/api/files");
+    if (!response.ok) {
+      throw new Error("Failed to fetch files");
+    }
+    const data = await response.json();
+    files.value = data;
+  } catch (error) {
+    console.error("Error fetching files:", error);
+  }
 }
+
+onMounted(() => {
+  fetchFiles();
+});
 function deleteFile(fileId) {
-    //todo
+  //todo
 }
 function uploadFile(file) {
-    //todo
+  //todo
 }
 //TODO, fixa layout osv, just nu bara lagt till grundläggande för att visa upp uppladdade filer
 </script>
 <template>
-    <div class="file-list">
-        <ul>
-            <li v-for="file in files" :key="file.id">{{ file.name }} - {{ file.date }}</li>
-        </ul>
-    </div>
+  <div class="file-list">
+    <ul>
+      <li v-for="file in files" :key="file.name">
+        {{ file.name }} - {{ file.size }} - {{ file.uploadDate }}
+      </li>
+    </ul>
+  </div>
 </template>
