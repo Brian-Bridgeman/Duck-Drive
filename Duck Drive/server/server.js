@@ -32,7 +32,21 @@ app.get("/api/files", async (req, res) => {
 
     res.json(fileList);
   } catch (error) {
-    res.status(500).json({ error: "Failed to load files" });
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/api/files/:filename", async (req, res) => {
+  try {
+    const filename = path.basename(req.params.filename);
+    const filepath = path.resolve(`./server/files/${filename}`);
+
+    if (!fs.existsSync(filepath)) {
+      return res.status(404).json({ error: "File not found" });
+    }
+    res.sendFile(filepath);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
