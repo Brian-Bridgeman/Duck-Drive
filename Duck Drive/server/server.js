@@ -50,6 +50,14 @@ app.get("/api/files/:filename", async (req, res) => {
   }
 });
 
+app.put("/api/files/:filename", (req, res) => {
+  //TODO: Implement file upload functionality
+});
+
+app.delete("/api/files/:filename", (req, res) => {
+  //TODO: Implement file deletion functionality
+});
+
 async function loadFiles() {
   try {
     const data = await fs.promises.readdir("./server/files");
