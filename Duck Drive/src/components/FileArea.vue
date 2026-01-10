@@ -10,6 +10,12 @@ const files=ref([
 function fetchFiles() {
     //TODO: lägga till api-anrop för att hämta filer
 }
+function deleteFile(fileId) {
+    //todo
+}
+function uploadFile(file) {
+    //todo
+}
 //TODO, fixa layout osv, just nu bara lagt till grundläggande för att visa upp uppladdade filer
 </script>
 <template>
