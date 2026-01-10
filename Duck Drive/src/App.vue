@@ -1,12 +1,13 @@
 <script setup>
 import Sidebar from './components/Sidebar.vue';
+import FileArea from './components/FileArea.vue';
   import { ref } from 'vue';
 </script>
 <template>
   <div class="app-container">
     <Sidebar />
     <main class="main-content">
-      <h1>Duck Drive</h1>
+      <FileArea />
     </main>
   </div>
 </template>
