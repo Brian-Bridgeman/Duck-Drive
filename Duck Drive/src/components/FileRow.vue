@@ -1,11 +1,15 @@
 <!--TODO: Fix file row display and functionality-->
 <script setup>
-defineProps({
+const emit = defineEmits(["delete"]);
+const props = defineProps({
   file: {
     type: Object,
     required: true,
   },
 });
+function onDeleteClick() {
+  emit("delete", props.file.name);
+}
 </script>
 
 <template>
@@ -19,7 +23,7 @@ defineProps({
     <div class="split">
       <span>{{ file.uploadDate }}</span>
     </div>
-    <div class="split"><button>x</button></div>
+    <div @click="onDeleteClick" class="split"><button>x</button></div>
   </div>
 </template>
 

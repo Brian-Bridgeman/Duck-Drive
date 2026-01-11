@@ -26,8 +26,20 @@ async function fetchFiles() {
 onMounted(() => {
   fetchFiles();
 });
-function deleteFile(fileId) {
-  //todo
+async function deleteFile(filename) {
+  try {
+    const res = await fetch(`/api/files/${filename}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to delete file");
+    }
+
+    files.value = files.value.filter((file) => file.name !== filename);
+  } catch (err) {
+    console.error(err);
+  }
 }
 function uploadFile(file) {
   //todo
@@ -54,8 +66,13 @@ const filteredFiles = computed(() => {
     <span>Name</span>
     <span>Size</span>
     <span>Uploaded at</span>
-    <div class="file-list"> 
-      <FileRow v-for="file in filteredFiles" :key="file.name" :file="file" />
+    <div class="file-list">
+      <FileRow
+        v-for="file in filteredFiles"
+        :key="file.name"
+        :file="file"
+        @delete="deleteFile"
+      />
     </div>
   </section>
 </template>
