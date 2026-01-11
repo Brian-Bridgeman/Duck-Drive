@@ -30,7 +30,11 @@ app.get("/api/files", async (req, res) => {
         const stats = await fs.promises.stat(`./server/files/${filename}`);
         return {
           name: filename,
-          size: (stats.size / (1024 * 1024)).toFixed(2) + " MB",
+          size : stats.size < 1024
+          ? stats.size + " B"
+          : stats.size < 1024 * 1024
+          ? (stats.size / 1024).toFixed(2) + " KB"
+          : (stats.size / (1024 * 1024)).toFixed(2) + " MB",
           uploadDate:
             stats.birthtime.toLocaleDateString("sv-SE") +
             " " +
