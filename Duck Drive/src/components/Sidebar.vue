@@ -3,42 +3,37 @@
 <script setup>
 import SidebarButton from "./SidebarButton.vue";
 import { ref } from "vue";
-import duckIcon from "@/assets/duck-drive-icon.png";
+import duckIcon from '@/assets/duck-drive-icon.png';
+
 
 const fileInput = ref(null);
 
-function openfilePicker() {
-  fileInput.value.click();
-}
+function openfilePicker() { fileInput.value.click();}
 
 async function uploadFile(event) {
   const file = event.target.files[0];
   if (!file) return;
 
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append('file', file);
 
-  await fetch("/api/upload", {
-    method: "POST",
+  await fetch('/api/upload', {
+    method: 'POST',
     body: formData,
   });
   event.target.value = null;
   console.log("vi nådde hit");
-  await fetchFiles();
+  await (fetchFiles());
 }
+
 </script>
 <template>
   <aside class="sidebar">
     <div class="header-container">
-      <img :src="duckIcon" alt="Duck drive icon" class="duck-icon" />
+      <img :src="duckIcon" alt="Duck drive icon" class="duck-icon"/>
       <h1>Drive</h1>
     </div>
-    <input
-      type="file"
-      ref="fileInput"
-      @change="uploadFile"
-      style="display: none"
-    />
+    <input type="file" ref="fileInput" @change="uploadFile" style="display : none" />
     <button class="new-button" @click="openfilePicker">+ Nytt</button>
     <nav>
       <ul>
@@ -63,7 +58,7 @@ async function uploadFile(event) {
   padding: 20px;
   box-sizing: border-box;
 }
-.header-container {
+.header-container{
   display: flex;
   align-items: center;
   margin-bottom: 20px;
@@ -82,11 +77,12 @@ async function uploadFile(event) {
   background: #ffffff;
   color: #333333;
   border: none;
-  border-radius: 4px;
+  border-radius: 22px;
   cursor: pointer;
   transition: ease-in-out 0.15s;
-  font-size: 1.5em;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  font-size: 1.2em;
+  text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1); 
+  box-shadow: 1px 6px 8px rgba(0, 0, 0, 0.1); 
 }
 
 .new-button:hover {
