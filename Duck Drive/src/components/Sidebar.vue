@@ -71,17 +71,19 @@ async function uploadFile(event) {
 .new-button {
   display: block;
   width: 100%;
-  padding: 10px;
+  padding: 30px;
   margin-bottom: 20px;
-  background-color: #007bff;
-  color: white;
+  background: #ffffff;
+  color: #333333;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: ease-in-out 0.15s;
+  font-size: 1.5em;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
 .new-button:hover {
-  background-color: #0056b3;
+  background-color: #e0e0e0;
 }
 </style>
