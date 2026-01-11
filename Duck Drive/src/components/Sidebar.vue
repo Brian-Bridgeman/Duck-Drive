@@ -3,6 +3,7 @@
 <script setup>
 import SidebarButton from "./SidebarButton.vue";
 import { ref } from "vue";
+import duckIcon from '@/assets/duck-drive-icon.png';
 
 const fileInput = ref(null);
 
@@ -21,12 +22,16 @@ async function uploadFile(event) {
   });
   event.target.value = null;
   console.log("vi nådde hit");
+  await (fetchFiles());
 }
 
 </script>
 <template>
   <aside class="sidebar">
-    <h1>Duck Drive</h1>
+    <div class="header-container">
+      <img :src="duckIcon" alt="Duck drive icon" class="duck-icon"/>
+      <h1>Drive</h1>
+    </div>
     <input type="file" ref="fileInput" @change="uploadFile" style="display : none" />
     <button class="new-button" @click="openfilePicker">+ Nytt</button>
     <nav>
@@ -52,6 +57,16 @@ async function uploadFile(event) {
   padding: 20px;
   box-sizing: border-box;
 }
+.header-container{
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+.duck-icon {
+  width: 40px;
+  height: 40px;
+}
 
 .new-button {
   display: block;
@@ -63,6 +78,7 @@ async function uploadFile(event) {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: ease-in-out 0.15s;
 }
 
 .new-button:hover {
