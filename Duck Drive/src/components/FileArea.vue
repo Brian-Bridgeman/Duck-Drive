@@ -29,12 +29,28 @@ function uploadFile(file) {
 }
 //TODO, fixa layout osv, just nu bara lagt till grundläggande för att visa upp uppladdade filer
 </script>
+
 <template>
-  <div class="file-list">
-    <ul>
-      <li v-for="file in files" :key="file.name">
-        {{ file.name }} - {{ file.size }} - {{ file.uploadDate }}
-      </li>
-    </ul>
-  </div>
+  <section>
+    <span>Name</span>
+    <span>Size</span>
+    <span>Uploaded at</span>
+    <div class="file-list">
+      <FileRow v-for="file in files" :key="file.name" :file="file" />
+    </div>
+  </section>
 </template>
+
+<style scoped>
+section {
+  border: 2px solid red;
+}
+.file-list {
+  margin-top: 30px;
+  border: 2px solid green;
+}
+span {
+  margin-left: 70px;
+  border: 2px solid yellow;
+}
+</style>
