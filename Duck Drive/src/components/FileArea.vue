@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import SearchBar from "./SearchBar.vue";
+import FileRow from "./FileRow.vue";
 
 const files = ref([]);
 
