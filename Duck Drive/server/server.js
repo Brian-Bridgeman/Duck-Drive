@@ -11,13 +11,12 @@ app.use(express.static("."));
 app.use(express.json());
 
 const storage = multer.diskStorage({
-  destination: './server/files/',
+  destination: "./server/files/",
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  }
+  },
 });
 const upload = multer({ storage });
-
 
 app.get("/index.html", (req, res) => {
   res.redirect("/");
@@ -60,15 +59,25 @@ app.get("/api/files/:filename", async (req, res) => {
   }
 });
 
-app.post("/api/upload", upload.single('file'), (req, res) => {
+app.post("/api/upload", upload.single("file"), (req, res) => {
   res.json({
     message: "File uploaded successfully",
     filename: req.file.filename,
-  })
+  });
 });
 
-app.delete("/api/files/:filename", (req, res) => {
-  //TODO: Implement file deletion functionality
+app.delete("/api/files/:filename", async (req, res) => {
+  try {
+    const filename = path.basename(req.params.filename);
+    const filepath = path.resolve(`./server/files/${filename}`);
+    if (!fs.existsSync(filepath)) {
+      return res.status(404).json({ error: "File not found" });
+    }
+    await fs.promises.unlink(filepath);
+    res.json({ message: "File deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 async function loadFiles() {
