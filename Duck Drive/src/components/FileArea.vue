@@ -80,6 +80,8 @@ const filteredFiles = computed(() => {
 <style scoped>
 .file-list {
   margin-top: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 span {
   margin-left: 70px;

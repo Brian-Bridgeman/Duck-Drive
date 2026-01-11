@@ -5,6 +5,7 @@ const searchQuery = defineModel();
 </script>
 
 <template>
+  <h1>Välkommen till Duck Drive</h1>
   <div class="search-bar">
     <input
       v-model="searchQuery"
@@ -17,12 +18,14 @@ const searchQuery = defineModel();
 
 <style scoped>
 .search-bar {
+  display: flex;
   margin: 20px;
-  justify-self: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .search-input {
-  width: 100%;
+  width: 75%;
   padding: 10px 15px;
   font-size: 16px;
   border: none;
@@ -34,5 +37,10 @@ const searchQuery = defineModel();
 
 .search-input:focus {
   border-color: gray;
+}
+h1 {
+  text-align: center;
+  font-weight: 100;
+  color: #333333;
 }
 </style>

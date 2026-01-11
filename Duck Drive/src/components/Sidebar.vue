@@ -72,7 +72,9 @@ async function uploadFile(event) {
   width: 40px;
   height: 40px;
 }
-
+h1 {
+  color: #333333;
+}
 .new-button {
   display: block;
   width: 100%;
@@ -89,7 +91,7 @@ async function uploadFile(event) {
 .new-button:hover {
   background-color: #0056b3;
 }
-nav ul{
+nav ul {
   padding: 0;
 }
 </style>
