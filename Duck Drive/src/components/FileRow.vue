@@ -10,20 +10,39 @@ defineProps({
 
 <template>
   <div class="file-component">
-    <span>{{ file.name }}</span>
-    <span>{{ file.size }}</span>
-    <span>{{ file.uploadDate }}</span>
+    <div class="split">
+      <span>{{ file.name }}</span>
+    </div>
+    <div class="split">
+      <span>{{ file.size }}</span>
+    </div>
+    <div class="split">
+      <span>{{ file.uploadDate }}</span>
+    </div>
+    <div class="split"><button>x</button></div>
   </div>
 </template>
 
 <style scoped>
 .file-component {
+  display: flex;
+  flex-direction: row;
   background-color: #f5f5f5;
-  margin: 10px;
-  padding: 20px;
-  border-radius: 1rem;
+  margin: 5px;
 }
-span {
-  margin-right: 50px;
+.split {
+  width: 25%;
+  box-sizing: border-box;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+.split span {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 10px;
 }
 </style>

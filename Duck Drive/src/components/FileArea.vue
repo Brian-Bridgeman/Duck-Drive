@@ -35,9 +35,6 @@ function uploadFile(file) {
 
 <template>
   <section>
-    <span>Name</span>
-    <span>Size</span>
-    <span>Uploaded at</span>
     <div class="file-list">
       <FileRow v-for="file in files" :key="file.name" :file="file" />
     </div>
@@ -45,15 +42,10 @@ function uploadFile(file) {
 </template>
 
 <style scoped>
-section {
-  border: 2px solid red;
-}
 .file-list {
   margin-top: 30px;
-  border: 2px solid green;
 }
 span {
   margin-left: 70px;
-  border: 2px solid yellow;
 }
 </style>
