@@ -2,16 +2,33 @@
 
 <script setup>
 import SidebarButton from "./SidebarButton.vue";
+import { ref } from "vue";
 
-function uploadFile() {
-  console.log("Upload file clicked");
-  //placeholder för uppladdningsknapp, fetch läggs häår senare
+const fileInput = ref(null);
+
+function openfilePicker() { fileInput.value.click();}
+
+async function uploadFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  await fetch('/api/upload', {
+    method: 'POST',
+    body: formData,
+  });
+  event.target.value = null;
+  console.log("vi nådde hit");
 }
+
 </script>
 <template>
   <aside class="sidebar">
     <h1>Duck Drive</h1>
-    <button class="new-button" @click="uploadFile">+ Nytt</button>
+    <input type="file" ref="fileInput" @change="uploadFile" style="display : none" />
+    <button class="new-button" @click="openfilePicker">+ Nytt</button>
     <nav>
       <ul>
         <SidebarButton label="Startsida" icon="" />

@@ -2,12 +2,22 @@
 
 import express from "express";
 import fs from "fs";
+import multer from "multer";
 import path from "path";
 const app = express();
 const port = 80;
 
 app.use(express.static("."));
 app.use(express.json());
+
+const storage = multer.diskStorage({
+  destination: './server/files/',
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+const upload = multer({ storage });
+
 
 app.get("/index.html", (req, res) => {
   res.redirect("/");
@@ -50,8 +60,11 @@ app.get("/api/files/:filename", async (req, res) => {
   }
 });
 
-app.put("/api/files/:filename", (req, res) => {
-  //TODO: Implement file upload functionality
+app.post("/api/upload", upload.single('file'), (req, res) => {
+  res.json({
+    message: "File uploaded successfully",
+    filename: req.file.filename,
+  })
 });
 
 app.delete("/api/files/:filename", (req, res) => {
