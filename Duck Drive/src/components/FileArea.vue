@@ -16,6 +16,9 @@ async function fetchFiles() {
   } catch (error) {
     console.error("Error fetching files:", error);
   }
+  setTimeout(() => {
+    fetchFiles();
+  }, 500);
 }
 
 onMounted(() => {
