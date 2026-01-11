@@ -34,3 +34,6 @@ coverage
 
 # Vitest
 __screenshots__/
+Duck Drive/server/files/*
+!Duck Drive/server/files/.gitkeep
+*.exe
