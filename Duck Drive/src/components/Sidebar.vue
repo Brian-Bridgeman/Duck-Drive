@@ -24,7 +24,6 @@ async function uploadFile(event) {
   });
   event.target.value = null;
   console.log("vi nådde hit");
-  await fetchFiles();
 }
 </script>
 <template>
@@ -89,5 +88,8 @@ async function uploadFile(event) {
 
 .new-button:hover {
   background-color: #0056b3;
+}
+nav ul{
+  padding: 0;
 }
 </style>
