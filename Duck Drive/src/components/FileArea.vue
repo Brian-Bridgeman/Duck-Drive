@@ -1,9 +1,11 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
+import fuzzysort from "fuzzysort";
 import SearchBar from "./SearchBar.vue";
 import FileRow from "./FileRow.vue";
 
 const files = ref([]);
+const searchQuery = ref("");
 
 async function fetchFiles() {
   try {
@@ -30,13 +32,30 @@ function deleteFile(fileId) {
 function uploadFile(file) {
   //todo
 }
+
+const filteredFiles = computed(() => {
+  if (!searchQuery.value) {
+    return files.value;
+  }
+
+  const results = fuzzysort.go(searchQuery.value, files.value, {
+    key: "name",
+    threshold: -10000,
+  });
+
+  return results.map((result) => result.obj);
+});
 //TODO, fixa layout osv, just nu bara lagt till grundläggande för att visa upp uppladdade filer
 </script>
 
 <template>
   <section>
-    <div class="file-list">
-      <FileRow v-for="file in files" :key="file.name" :file="file" />
+    <SearchBar v-model="searchQuery" />
+    <span>Name</span>
+    <span>Size</span>
+    <span>Uploaded at</span>
+    <div class="file-list"> 
+      <FileRow v-for="file in filteredFiles" :key="file.name" :file="file" />
     </div>
   </section>
 </template>

@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "express": "^5.2.1",
+    "fuzzysort": "^3.1.0",
     "multer": "^2.0.2",
     "vue": "^3.5.26"
   },
