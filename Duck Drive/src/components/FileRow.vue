@@ -31,6 +31,7 @@ function onFileSelect() {
   emit("select", props.file.name);
 }
 function startEditing() {
+  onFileSelect();
   isEditing.value = true;
   const extension = props.file.name.lastIndexOf(".");
   newFileName.value = extension > 0
@@ -183,7 +184,7 @@ const fileFormatIcon = computed(() => {
   padding: 0px;
 }
 .fileBtn:hover {
-  background-color: #e0e1e0;
+  background-color: #c6c7c6;
   border-radius: 1rem;
 }
 .file-component.selected {
