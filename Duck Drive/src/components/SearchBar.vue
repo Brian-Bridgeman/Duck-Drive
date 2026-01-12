@@ -7,11 +7,13 @@ const searchQuery = defineModel();
 <template>
   <h1>Välkommen till Duck Drive</h1>
   <div class="search-bar">
+    <span class="search-icon">🔍</span>
     <input
       v-model="searchQuery"
       type="text"
       placeholder="Sök på Duck Drive..."
       class="search-input"
+      id="search-input"
     />
   </div>
 </template>
@@ -22,11 +24,24 @@ const searchQuery = defineModel();
   margin: 20px;
   justify-content: center;
   align-items: center;
+  position: relative;
+  max-width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 20px;
+  color: #5f6368;
+  pointer-events: none;
+  user-select: none;
 }
 
 .search-input {
-  width: 75%;
-  padding: 10px 15px;
+  width: 100%;
+  padding: 10px 15px 10px 45px;
   font-size: 16px;
   border: none;
   border-radius: 20px;
