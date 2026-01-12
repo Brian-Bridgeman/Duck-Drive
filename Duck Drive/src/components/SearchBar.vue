@@ -1,5 +1,6 @@
 <script setup>
 import { defineModel } from "vue";
+import searchIcon from "@/assets/icons/search.png";
 
 const searchQuery = defineModel();
 </script>
@@ -7,7 +8,9 @@ const searchQuery = defineModel();
 <template>
   <h1>Välkommen till Duck Drive</h1>
   <div class="search-bar">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon"
+      ><img :src="searchIcon" style="width: 20px" alt=""
+    /></span>
     <input
       v-model="searchQuery"
       type="text"
@@ -37,6 +40,7 @@ const searchQuery = defineModel();
   color: #5f6368;
   pointer-events: none;
   user-select: none;
+  margin-left: 5px;
 }
 
 .search-input {
