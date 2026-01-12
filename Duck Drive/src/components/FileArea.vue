@@ -23,14 +23,12 @@ async function fetchFiles() {
   } catch (error) {
     console.error("Error fetching files:", error);
   }
-  setTimeout(() => {
-    fetchFiles();
-  }, 500);
 }
 
 onMounted(() => {
   fetchFiles();
 });
+
 async function deleteFile(filename) {
   try {
     const res = await fetch(`/api/files/${filename}`, {
@@ -41,13 +39,10 @@ async function deleteFile(filename) {
       throw new Error("Failed to delete file");
     }
 
-    files.value = files.value.filter((file) => file.name !== filename);
+    await fetchFiles();
   } catch (err) {
     console.error(err);
   }
-}
-function uploadFile(file) {
-  //todo
 }
 
 const filteredFiles = computed(() => {
@@ -62,7 +57,8 @@ const filteredFiles = computed(() => {
 
   return results.map((result) => result.obj);
 });
-//TODO, fixa layout osv, just nu bara lagt till grundläggande för att visa upp uppladdade filer
+
+defineExpose({ fetchFiles });
 </script>
 
 <template>
