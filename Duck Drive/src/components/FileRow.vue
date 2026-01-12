@@ -1,8 +1,11 @@
 <!--TODO: Fix file row display and functionality-->
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import trashIcon from "@/assets/icons/trash.png";
 import downloadIcon from "@/assets/icons/download.png";
+import imageIcon from "@/assets/icons/picture.png";
+import audioIcon from "@/assets/icons/headphones.png";
+import fileIcon from "@/assets/icons/file.png";
 const emit = defineEmits(["delete", "select"]);
 
 const props = defineProps({
@@ -41,11 +44,22 @@ async function downloadFile(filename) {
     console.error("Error downloading file:", error);
   }
 }
+const fileFormatIcon = computed(() => {
+  switch (props.file.type) {
+    case "mp3":
+      return audioIcon;
+    case "jpg":
+      return imageIcon;
+    default:
+      return fileIcon;
+  }
+});
 </script>
 
 <template>
   <div class="file-component" :class="{ selected }" @click.stop="onFileSelect">
     <div class="split">
+      <img class="fileIcon" :src="fileFormatIcon" alt="" />
       <span>{{ file.name }}</span>
     </div>
     <div class="split">
@@ -122,5 +136,9 @@ async function downloadFile(filename) {
   gap: 20px;
   justify-content: flex-end;
   padding-right: 20px;
+}
+.fileIcon {
+  width: 20px;
+  margin: 10px;
 }
 </style>
