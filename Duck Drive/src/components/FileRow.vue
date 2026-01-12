@@ -6,6 +6,7 @@ import downloadIcon from "@/assets/icons/download.png";
 import imageIcon from "@/assets/icons/picture.png";
 import audioIcon from "@/assets/icons/headphones.png";
 import fileIcon from "@/assets/icons/file.png";
+import fileEditIcon from "@/assets/icons/file-edit.png";
 const emit = defineEmits(["delete", "select"]);
 
 const props = defineProps({
@@ -18,6 +19,7 @@ const props = defineProps({
     required: true,
   },
 });
+
 function onDeleteClick() {
   emit("delete", props.file.name);
 }
@@ -26,22 +28,20 @@ function onFileSelect() {
 }
 const downloadLink = ref(null);
 
-async function downloadFile(filename) {
+async function renameFile(oldName, newName) {
   try {
-    const response = await fetch(`/api/files/${encodeURIComponent(filename)}`);
+    const response = await fetch(`/api/files/rename`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ oldName, newName }),
+    });
     if (!response.ok) {
-      throw new Error("Failed to download file");
+      throw new Error("Failed to rename file");
     }
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-
-    downloadLink.value.href = url;
-    downloadLink.value.download = filename;
-    downloadLink.value.click();
-
-    window.URL.revokeObjectURL(url);
   } catch (error) {
-    console.error("Error downloading file:", error);
+    console.error(error);
   }
 }
 const fileFormatIcon = computed(() => {
@@ -78,6 +78,10 @@ const fileFormatIcon = computed(() => {
         @click.stop="downloadFile(file.name)"
         class="fileBtn"
         :style="{ backgroundImage: `url(${downloadIcon})` }"
+      ></button>
+      <button
+        class="fileBtn"
+        :style="{ backgroundImage: `url(${fileEditIcon})` }"
       ></button>
     </div>
     <a ref="downloadLink" style="display: none"></a>
