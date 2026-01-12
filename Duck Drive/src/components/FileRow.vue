@@ -131,6 +131,7 @@ const fileFormatIcon = computed(() => {
         ref="inputRef"
         v-model="newFileName"
         @click.stop
+        @blur="cancelEditing"
         @keydown="handleKeyDown"
         class="filename-input"
         type="text"
