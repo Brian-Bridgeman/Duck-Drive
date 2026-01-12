@@ -6,6 +6,10 @@ import downloadIcon from "@/assets/icons/download.png";
 import imageIcon from "@/assets/icons/picture.png";
 import audioIcon from "@/assets/icons/headphones.png";
 import fileIcon from "@/assets/icons/file.png";
+import pdfIcon from "@/assets/icons/file-pdf.png";
+import zipIcon from "@/assets/icons/file-zipper.png";
+import videoIcon from "@/assets/icons/clapperboard.png";
+import documentIcon from "@/assets/icons/document.png";
 const emit = defineEmits(["delete", "select"]);
 
 const props = defineProps({
@@ -47,9 +51,33 @@ async function downloadFile(filename) {
 const fileFormatIcon = computed(() => {
   switch (props.file.type) {
     case "mp3":
+    case "wav":
+    case "flac":
+    case "aiff":
       return audioIcon;
+    case "png":
     case "jpg":
+    case "jpeg":
+    case "tif":
+    case "tiff":
+    case "raw":
       return imageIcon;
+    case "pdf":
+      return pdfIcon;
+    case "zip":
+      return zipIcon;
+    case "mp4":
+    case "mov":
+    case "avi":
+      return videoIcon;
+    case "txt":
+    case "docx":
+    case "doc":
+    case "csv":
+    case "log":
+    case "xml":
+    case "md":
+      return documentIcon;
     default:
       return fileIcon;
   }
