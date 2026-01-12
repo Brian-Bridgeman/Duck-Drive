@@ -1,5 +1,6 @@
 <!--TODO: Fix file row display and functionality-->
 <script setup>
+import { ref } from "vue";
 const emit = defineEmits(["delete"]);
 const props = defineProps({
   file: {
@@ -10,11 +11,32 @@ const props = defineProps({
 function onDeleteClick() {
   emit("delete", props.file.name);
 }
+
+const downloadLink = ref(null);
+
+async function downloadFile(filename) {
+  try {
+    const response = await fetch(`/api/files/${encodeURIComponent(filename)}`);
+    if (!response.ok) {
+      throw new Error("Failed to download file");
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    downloadLink.value.href = url;
+    downloadLink.value.download = filename;
+    downloadLink.value.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Error downloading file:", error);
+  }
+}
 </script>
 
 <template>
   <div class="file-component">
-    <div class="split">
+    <div class="split" @click="downloadFile(file.name)" style="cursor: pointer">
       <span>{{ file.name }}</span>
     </div>
     <div class="split">
@@ -24,6 +46,7 @@ function onDeleteClick() {
       <span>{{ file.uploadDate }}</span>
     </div>
     <div @click="onDeleteClick" class="split"><button>x</button></div>
+    <a ref="downloadLink" style="display: none"></a>
   </div>
 </template>
 
