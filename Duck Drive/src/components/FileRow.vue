@@ -6,7 +6,7 @@ import downloadIcon from "@/assets/icons/download.png";
 import imageIcon from "@/assets/icons/picture.png";
 import audioIcon from "@/assets/icons/headphones.png";
 import fileIcon from "@/assets/icons/file.png";
-import fileEditIcon from "@/assets/icons/file-edit.png";
+import fileEditIcon from "@/assets/icons/pencil.png";
 const emit = defineEmits(["delete", "select", "rename"]);
 
 const props = defineProps({
