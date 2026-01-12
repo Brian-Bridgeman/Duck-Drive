@@ -4,10 +4,13 @@ import express from "express";
 import fs from "fs";
 import multer from "multer";
 import path from "path";
+import { fileURLToPath } from "url";
 const app = express();
 const port = 80;
 
-app.use(express.static("."));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const distPath = path.join(__dirname, "..", "dist");
+app.use(express.static(distPath));
 app.use(express.json());
 
 const storage = multer.diskStorage({
