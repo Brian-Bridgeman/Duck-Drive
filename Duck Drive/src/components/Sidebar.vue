@@ -97,15 +97,14 @@ h1 {
   color: black;
   border: none;
   font-size: 1.1em;
-  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   cursor: pointer;
   transition: ease-in-out 0.15s;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.568);
 }
 .plus-icon {
-  width: 16px;
-  height: 16px;
+  width: 1.2em;
+  height: 1.2em;
   margin-right: 8px;
   vertical-align: middle;
 }
@@ -113,6 +112,10 @@ h1 {
 .new-button:hover {
   background-color: #edf1fa;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+}
+.new-button:active {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); 
+  scale: 0.96;
 }
 nav ul {
   padding: 0;
