@@ -75,24 +75,24 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   });
 });
 
-app.put("api/files/:filename", async (req, res) => {
+app.put("/api/files/:filename", async (req, res) => {
   try {
     const oldFileName = path.basename(req.params.filename);
     const newFileName = path.basename(req.body.newName);
-    if (!newFilename) return;
-    const oldFilePath = path.resolve(`./server/files/${oldName}`);
-    const newFilePath = path.resolve(`./server/files/${newName}`);
-    if (!fs.existsSync(oldFilePath)) return res.status(404).json({ error });
+    if (!newFileName) return res.status(400).json({ error: "New file name is required" });
+    const oldFilePath = path.resolve(`./server/files/${oldFileName}`);
+    const newFilePath = path.resolve(`./server/files/${newFileName}`);
+    if (!fs.existsSync(oldFilePath)) return res.status(404).json({ error: "File not found" });
     if (fs.existsSync(newFilePath)) return res.status(409).json({ error: "File already exists" });
-
+    
     await fs.promises.rename(oldFilePath, newFilePath);
     res.json({
-      mnessage: "File renamed",
+      message: "File renamed",
       oldName: oldFileName,
       newName: newFileName,
     })
   } catch (error) {
-    res.status(500).json({ error });
+    res.status(500).json({ error: "Server erroR" });
   }
 });
 

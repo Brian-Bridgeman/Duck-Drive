@@ -47,12 +47,12 @@ async function deleteFile(filename) {
 
 async function renameFile(oldName, newName) {
   try {
-    const response = await fetch(`/api/files/rename`, {
+    const response = await fetch(`/api/files/${oldName}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ oldName, newName }),
+      body: JSON.stringify({ newName }),
     });
     if (!response.ok) {
       throw new Error("Failed to rename file");

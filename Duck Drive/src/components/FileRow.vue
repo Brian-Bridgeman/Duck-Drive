@@ -7,7 +7,7 @@ import imageIcon from "@/assets/icons/picture.png";
 import audioIcon from "@/assets/icons/headphones.png";
 import fileIcon from "@/assets/icons/file.png";
 import fileEditIcon from "@/assets/icons/file-edit.png";
-const emit = defineEmits(["delete", "select"]);
+const emit = defineEmits(["delete", "select", "rename"]);
 
 const props = defineProps({
   file: {
@@ -20,30 +20,64 @@ const props = defineProps({
   },
 });
 
+const isEditing = ref(false);
+const newFileName = ref("");
+const inputRef = ref(null);
+
 function onDeleteClick() {
   emit("delete", props.file.name);
 }
 function onFileSelect() {
   emit("select", props.file.name);
 }
-const downloadLink = ref(null);
-
-async function renameFile(oldName, newName) {
-  try {
-    const response = await fetch(`/api/files/rename`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ oldName, newName }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to rename file");
-    }
-  } catch (error) {
-    console.error(error);
+function startEditing() {
+  isEditing.value = true;
+  newFileName.value = props.file.name;
+  setTimeout(() => {
+    inputRef.value.focus();
+    inputRef.value.select();
+  }, 0);
+}
+function cancelEditing() {
+  isEditing.value = false;
+  newFileName.value = "";
+}
+function handleKeyDown(event) {
+  if (event.key === "Enter") {
+    saveEdit();
+  } else if (event.key === "Escape") {
+    cancelEditing();
   }
 }
+async function saveEdit() {
+  if (!newFileName.value || newFileName.value === props.file.name) {
+    cancelEditing();
+    return;
+  }
+  emit ("rename", props.file.name, newFileName.value);
+  isEditing.value = false;
+}
+const downloadLink = ref(null);
+
+async function downloadFile(filename) {
+  try {
+    const response = await fetch(`/api/files/${encodeURIComponent(filename)}`);
+    if (!response.ok) {
+      throw new Error("Failed to download file");
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    downloadLink.value.href = url;
+    downloadLink.value.download = filename;
+    downloadLink.value.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Error downloading file:", error);
+  }
+}
+
 const fileFormatIcon = computed(() => {
   switch (props.file.type) {
     case "mp3":
@@ -60,7 +94,16 @@ const fileFormatIcon = computed(() => {
   <div class="file-component" :class="{ selected }" @click.stop="onFileSelect">
     <div class="split">
       <img class="fileIcon" :src="fileFormatIcon" alt="" />
-      <span>{{ file.name }}</span>
+      <span v-if="!isEditing">{{ file.name }}</span>
+      <input
+        v-else
+        ref="inputRef"
+        v-model = "newFileName"
+        @click.stop
+        @keydown="handleKeyDown"
+        class="filename-input"
+        type="text"
+      />
     </div>
     <div class="split">
       <span>{{ file.size }}</span>
@@ -80,6 +123,7 @@ const fileFormatIcon = computed(() => {
         :style="{ backgroundImage: `url(${downloadIcon})` }"
       ></button>
       <button
+      @click.stop="startEditing"
         class="fileBtn"
         :style="{ backgroundImage: `url(${fileEditIcon})` }"
       ></button>
