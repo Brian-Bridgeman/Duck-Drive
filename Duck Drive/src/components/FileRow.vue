@@ -136,6 +136,17 @@ const fileFormatIcon = computed(() => {
 </template>
 
 <style scoped>
+.filename-input {
+  flex: 1;
+  margin: 0px;
+  border: 1px solid #6b6d71;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: inherit;
+  font-family: inherit;
+  outline: none;
+  background-color: white;
+  }
 .file-component {
   display: flex;
   flex-direction: row;
