@@ -10,7 +10,8 @@ import pdfIcon from "@/assets/icons/file-pdf.png";
 import zipIcon from "@/assets/icons/file-zipper.png";
 import videoIcon from "@/assets/icons/clapperboard.png";
 import documentIcon from "@/assets/icons/document.png";
-const emit = defineEmits(["delete", "select"]);
+import fileEditIcon from "@/assets/icons/pencil.png";
+const emit = defineEmits(["delete", "select", "rename"]);
 
 const props = defineProps({
   file: {
@@ -22,11 +23,46 @@ const props = defineProps({
     required: true,
   },
 });
+
+const isEditing = ref(false);
+const newFileName = ref("");
+const inputRef = ref(null);
+
 function onDeleteClick() {
   emit("delete", props.file.name);
 }
 function onFileSelect() {
   emit("select", props.file.name);
+}
+function startEditing() {
+  onFileSelect();
+  isEditing.value = true;
+  const extension = props.file.name.lastIndexOf(".");
+  newFileName.value =
+    extension > 0 ? props.file.name.substring(0, extension) : props.file.name;
+  setTimeout(() => {
+    inputRef.value.focus();
+    inputRef.value.select();
+  }, 0);
+}
+function cancelEditing() {
+  isEditing.value = false;
+  newFileName.value = "";
+}
+function handleKeyDown(event) {
+  if (event.key === "Enter") {
+    saveEdit();
+  } else if (event.key === "Escape") {
+    cancelEditing();
+  }
+}
+async function saveEdit() {
+  if (!newFileName.value || newFileName.value === props.file.name) {
+    cancelEditing();
+    return;
+  }
+  emit("rename", props.file.name, newFileName.value);
+  isEditing.value = false;
 }
 const downloadLink = ref(null);
 
@@ -48,6 +84,7 @@ async function downloadFile(filename) {
     console.error("Error downloading file:", error);
   }
 }
+
 const fileFormatIcon = computed(() => {
   switch (props.file.type) {
     case "mp3":
@@ -88,7 +125,16 @@ const fileFormatIcon = computed(() => {
   <div class="file-component" :class="{ selected }" @click.stop="onFileSelect">
     <div class="split">
       <img class="fileIcon" :src="fileFormatIcon" alt="" />
-      <span>{{ file.name }}</span>
+      <span v-if="!isEditing">{{ file.name }}</span>
+      <input
+        v-else
+        ref="inputRef"
+        v-model="newFileName"
+        @click.stop
+        @keydown="handleKeyDown"
+        class="filename-input"
+        type="text"
+      />
     </div>
     <div class="split">
       <span>{{ file.size }}</span>
@@ -107,12 +153,28 @@ const fileFormatIcon = computed(() => {
         class="fileBtn"
         :style="{ backgroundImage: `url(${downloadIcon})` }"
       ></button>
+      <button
+        @click.stop="startEditing"
+        class="fileBtn"
+        :style="{ backgroundImage: `url(${fileEditIcon})` }"
+      ></button>
     </div>
     <a ref="downloadLink" style="display: none"></a>
   </div>
 </template>
 
 <style scoped>
+.filename-input {
+  flex: 1;
+  margin: 0px;
+  border: 1px solid #6b6d71;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: inherit;
+  font-family: inherit;
+  outline: none;
+  background-color: white;
+}
 .file-component {
   display: flex;
   flex-direction: row;
@@ -149,7 +211,7 @@ const fileFormatIcon = computed(() => {
   padding: 0px;
 }
 .fileBtn:hover {
-  background-color: #e0e1e0;
+  background-color: #c6c7c6;
   border-radius: 1rem;
 }
 .file-component.selected {

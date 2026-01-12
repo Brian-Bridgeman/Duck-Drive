@@ -45,6 +45,24 @@ async function deleteFile(filename) {
   }
 }
 
+async function renameFile(oldName, newName) {
+  try {
+    const response = await fetch(`/api/files/${oldName}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ newName }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to rename file");
+    }
+    await fetchFiles();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const filteredFiles = computed(() => {
   if (!searchQuery.value) {
     return files.value;
@@ -75,6 +93,7 @@ defineExpose({ fetchFiles });
         :selected="file.name === selectedFile"
         @select="selectFile"
         @delete="deleteFile"
+        @rename="renameFile"
       />
     </div>
   </section>
