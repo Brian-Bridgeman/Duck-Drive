@@ -54,8 +54,8 @@ async function downloadFile(filename) {
 .file-component {
   display: flex;
   flex-direction: row;
-  background-color: #f5f5f5;
   margin: 5px;
+  border-bottom: 1px solid #6b6d71;
 }
 .split {
   width: 25%;

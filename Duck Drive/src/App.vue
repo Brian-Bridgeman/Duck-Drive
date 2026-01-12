@@ -28,9 +28,16 @@ body {
 .app-container {
   display: flex;
   height: 100vh;
+  background-color: #f5f5f5;
 }
 .main-content {
   flex: 1;
   overflow: auto;
+  margin-left: 20px;
+  margin-right: 60px;
+  margin-top: 60px;
+  margin-bottom: 20px;
+  border-radius: 1rem;
+  background-color: white;
 }
 </style>

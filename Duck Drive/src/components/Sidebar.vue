@@ -59,14 +59,15 @@ async function uploadFile(event) {
 .sidebar {
   width: 200px;
   background-color: #f5f5f5;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
   box-sizing: border-box;
 }
 .header-container {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
-  gap: 10px;
 }
 .duck-icon {
   width: 40px;
@@ -74,6 +75,9 @@ async function uploadFile(event) {
 }
 h1 {
   color: #333333;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .new-button {
   display: block;
