@@ -1,17 +1,26 @@
 <!--TODO: Fix file row display and functionality-->
 <script setup>
 import { ref } from "vue";
-const emit = defineEmits(["delete"]);
+import trashIcon from "@/assets/icons/trash.png";
+import downloadIcon from "@/assets/icons/download.png";
+const emit = defineEmits(["delete", "select"]);
+
 const props = defineProps({
   file: {
     type: Object,
+    required: true,
+  },
+  selected: {
+    type: Boolean,
     required: true,
   },
 });
 function onDeleteClick() {
   emit("delete", props.file.name);
 }
-
+function onFileSelect() {
+  emit("select", props.file.name);
+}
 const downloadLink = ref(null);
 
 async function downloadFile(filename) {
@@ -35,8 +44,8 @@ async function downloadFile(filename) {
 </script>
 
 <template>
-  <div class="file-component">
-    <div class="split" @click="downloadFile(file.name)" style="cursor: pointer">
+  <div class="file-component" :class="{ selected }" @click.stop="onFileSelect">
+    <div class="split">
       <span>{{ file.name }}</span>
     </div>
     <div class="split">
@@ -45,7 +54,18 @@ async function downloadFile(filename) {
     <div class="split">
       <span>{{ file.uploadDate }}</span>
     </div>
-    <div @click="onDeleteClick" class="split"><button>x</button></div>
+    <div class="split icons">
+      <button
+        @click.stop="onDeleteClick"
+        class="fileBtn"
+        :style="{ backgroundImage: `url(${trashIcon})` }"
+      ></button>
+      <button
+        @click.stop="downloadFile(file.name)"
+        class="fileBtn"
+        :style="{ backgroundImage: `url(${downloadIcon})` }"
+      ></button>
+    </div>
     <a ref="downloadLink" style="display: none"></a>
   </div>
 </template>
@@ -54,8 +74,10 @@ async function downloadFile(filename) {
 .file-component {
   display: flex;
   flex-direction: row;
-  margin: 5px;
   border-bottom: 1px solid #6b6d71;
+}
+.file-component:hover {
+  background-color: #ededed;
 }
 .split {
   width: 25%;
@@ -64,6 +86,7 @@ async function downloadFile(filename) {
   padding-bottom: 10px;
   display: flex;
   align-items: center;
+  cursor: default;
 }
 .split span {
   display: block;
@@ -71,5 +94,33 @@ async function downloadFile(filename) {
   white-space: nowrap;
   text-overflow: ellipsis;
   margin: 10px;
+}
+.fileBtn {
+  width: 36px;
+  height: 36px;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  padding: 0px;
+}
+.fileBtn:hover {
+  background-color: #e0e1e0;
+  border-radius: 1rem;
+}
+.file-component.selected {
+  background-color: #c2e7ff;
+}
+.file-component.selected .fileBtn:hover {
+  background-color: #aad0e6;
+}
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: flex-end;
+  padding-right: 20px;
 }
 </style>

@@ -6,6 +6,11 @@ import FileRow from "./FileRow.vue";
 
 const files = ref([]);
 const searchQuery = ref("");
+const selectedFile = ref(null);
+
+function selectFile(filename) {
+  selectedFile.value = filename;
+}
 
 async function fetchFiles() {
   try {
@@ -71,6 +76,8 @@ const filteredFiles = computed(() => {
         v-for="file in filteredFiles"
         :key="file.name"
         :file="file"
+        :selected="file.name === selectedFile"
+        @select="selectFile"
         @delete="deleteFile"
       />
     </div>
