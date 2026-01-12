@@ -1,13 +1,21 @@
 <script setup>
 import Sidebar from "./components/Sidebar.vue";
 import FileArea from "./components/FileArea.vue";
-import { ref } from "vue";
+import { ref, provide } from "vue";
+
+const fileAreaRef = ref(null);
+
+provide('refreshFiles', () => {
+  if (fileAreaRef.value) {
+    fileAreaRef.value.fetchFiles();
+  }
+});
 </script>
 <template>
   <div class="app-container">
     <Sidebar />
     <main class="main-content">
-      <FileArea />
+      <FileArea ref="fileAreaRef" />
     </main>
   </div>
 </template>

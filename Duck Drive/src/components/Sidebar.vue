@@ -2,10 +2,11 @@
 
 <script setup>
 import SidebarButton from "./SidebarButton.vue";
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import duckIcon from "@/assets/duck-drive-icon.png";
 
 const fileInput = ref(null);
+const refreshFiles = inject('refreshFiles', null);
 
 function openfilePicker() {
   fileInput.value.click();
@@ -22,8 +23,12 @@ async function uploadFile(event) {
     method: "POST",
     body: formData,
   });
+  
+  if (refreshFiles) {
+    await refreshFiles();
+  }
+  
   event.target.value = null;
-  console.log("vi nådde hit");
 }
 </script>
 <template>
