@@ -43,6 +43,7 @@ app.get("/api/files", async (req, res) => {
             stats.birthtime.toLocaleDateString("sv-SE") +
             " " +
             stats.birthtime.toLocaleTimeString("sv-SE"),
+          type: filename.split(".").pop().toLowerCase(),
         };
       })
     );
