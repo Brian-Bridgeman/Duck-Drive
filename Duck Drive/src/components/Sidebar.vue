@@ -4,6 +4,7 @@
 import SidebarButton from "./SidebarButton.vue";
 import { ref, inject } from "vue";
 import duckIcon from "@/assets/duck-drive-icon.png";
+import plusIcon from "@/assets/icons/plus.png";
 
 const fileInput = ref(null);
 const refreshFiles = inject('refreshFiles', null);
@@ -43,18 +44,21 @@ async function uploadFile(event) {
       @change="uploadFile"
       style="display: none"
     />
-    <button class="new-button" @click="openfilePicker">+ Nytt</button>
+    <button class="new-button" @click="openfilePicker"><img :src="plusIcon" alt="Plus icon" class="plus-icon" /> Nytt</button>
     <nav>
       <ul>
-        <SidebarButton label="Startsida" icon="" />
-        <SidebarButton label="Min Enhet" icon="" />
-        <SidebarButton label="Datorer" icon="" />
-        <SidebarButton label="Delas med mig" icon="" />
-        <SidebarButton label="Senaste" icon="" />
-        <SidebarButton label="Stjärnmärkt" icon="" />
-        <SidebarButton label="Skräppost" icon="" />
-        <SidebarButton label="Papperskorgen" icon="" />
-        <SidebarButton label="Lagring" icon="" />
+        <SidebarButton label="Startsida" icon="home" />
+        <SidebarButton label="Min Enhet" icon="laptop" />
+        <SidebarButton label="Datorer" icon="devices" />
+        <span class="divider"></span>
+        <SidebarButton label="Delas med mig" icon="shared" />
+        <SidebarButton label="Senaste" icon="clock" />
+        <SidebarButton label="Stjärnmärkt" icon="star" />
+        <span class="divider"></span>
+        <SidebarButton label="Skräppost" icon="exclamation" />
+        <SidebarButton label="Papperskorgen" icon="trash" />
+        <SidebarButton label="Lagring" icon="storage" />
+        <span class="divider"></span>
       </ul>
     </nav>
   </aside>
@@ -73,34 +77,55 @@ async function uploadFile(event) {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  margin-bottom: 0.6em;
 }
 .duck-icon {
-  width: 40px;
-  height: 40px;
+  width: 3.5em;
+  height: 3.5em;
 }
 h1 {
-  color: #333333;
+  color: #444746;
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
+  font-weight: normal;
+  font-size: 1.7em;
 }
 .new-button {
   display: block;
-  width: 100%;
-  padding: 10px;
+  width: fit-content;
+  padding: 20px 20px;
   margin-bottom: 20px;
-  background-color: #007bff;
-  color: white;
+  background-color: #ffffff;
+  color: black;
   border: none;
-  border-radius: 4px;
+  font-size: 1.1em;
+  border-radius: 16px;
   cursor: pointer;
   transition: ease-in-out 0.15s;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.568);
+}
+.plus-icon {
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 .new-button:hover {
-  background-color: #0056b3;
+  background-color: #edf1fa;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+}
+.new-button:active {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); 
+  scale: 0.96;
 }
 nav ul {
   padding: 0;
+}
+.divider{
+  display: block;
+  height: 1px;
+  margin: 10px 0;
 }
 </style>
