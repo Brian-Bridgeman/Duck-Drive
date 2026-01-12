@@ -77,16 +77,19 @@ async function uploadFile(event) {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  margin-bottom: 0.6em;
 }
 .duck-icon {
-  width: 40px;
-  height: 40px;
+  width: 3.5em;
+  height: 3.5em;
 }
 h1 {
-  color: #333333;
+  color: #444746;
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
+  font-weight: normal;
+  font-size: 1.7em;
 }
 .new-button {
   display: block;
@@ -100,7 +103,7 @@ h1 {
   border-radius: 16px;
   cursor: pointer;
   transition: ease-in-out 0.15s;
-  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.568);
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.568);
 }
 .plus-icon {
   width: 1.2em;
