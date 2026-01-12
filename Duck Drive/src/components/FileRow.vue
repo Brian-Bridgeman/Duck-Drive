@@ -32,7 +32,10 @@ function onFileSelect() {
 }
 function startEditing() {
   isEditing.value = true;
-  newFileName.value = props.file.name;
+  const extension = props.file.name.lastIndexOf(".");
+  newFileName.value = extension > 0
+    ? props.file.name.substring(0, extension)
+    : props.file.name;
   setTimeout(() => {
     inputRef.value.focus();
     inputRef.value.select();

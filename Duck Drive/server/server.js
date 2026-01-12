@@ -78,12 +78,22 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 app.put("/api/files/:filename", async (req, res) => {
   try {
     const oldFileName = path.basename(req.params.filename);
-    const newFileName = path.basename(req.body.newName);
-    if (!newFileName) return res.status(400).json({ error: "New file name is required" });
+    const newFileNameInput = path.basename(req.body.newName);
+    if (!newFileNameInput) {
+      return res.status(400).json({ error: "New file name is required" });
+    }
+    const extension = path.extname(oldFileName);
+    const newFileName = newFileNameInput.endsWith(extension)
+      ? newFileNameInput
+      : newFileNameInput + extension;
     const oldFilePath = path.resolve(`./server/files/${oldFileName}`);
     const newFilePath = path.resolve(`./server/files/${newFileName}`);
-    if (!fs.existsSync(oldFilePath)) return res.status(404).json({ error: "File not found" });
-    if (fs.existsSync(newFilePath)) return res.status(409).json({ error: "File already exists" });
+    if (!fs.existsSync(oldFilePath)) {
+      return res.status(404).json({ error: "File not found" });
+    }
+    if (fs.existsSync(newFilePath)) {
+      return res.status(409).json({ error: "File already exists" });
+    }
     
     await fs.promises.rename(oldFilePath, newFilePath);
     res.json({
