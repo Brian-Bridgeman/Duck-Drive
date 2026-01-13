@@ -5,7 +5,8 @@ import duckIcon from "@/assets/duck-drive-icon.png";
 import plusIcon from "@/assets/icons/plus.png";
 
 const fileInput = ref(null);
-const refreshFiles = inject('refreshFiles', null);
+const refreshFiles = inject("refreshFiles", null);
+const showMenu = ref(false);
 
 function openfilePicker() {
   fileInput.value.click();
@@ -22,12 +23,28 @@ async function uploadFile(event) {
     method: "POST",
     body: formData,
   });
-  
+
   if (refreshFiles) {
     await refreshFiles();
   }
-  
+
   event.target.value = null;
+}
+
+async function createFolder() {
+  const name = prompt("Ange namn för den nya mappen:");
+  if (!name) return;
+
+  await fetch("/api/folders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  });
+
+  if (refreshFiles) {
+    await refreshFiles();
+  }
+  showMenu.value = false;
 }
 </script>
 <template>
@@ -42,7 +59,9 @@ async function uploadFile(event) {
       @change="uploadFile"
       style="display: none"
     />
-    <button class="new-button" @click="openfilePicker"><img :src="plusIcon" alt="Plus icon" class="plus-icon" /> Nytt</button>
+    <button class="new-button" @click="openfilePicker">
+      <img :src="plusIcon" alt="Plus icon" class="plus-icon" /> Nytt
+    </button>
     <nav>
       <ul>
         <SidebarButton label="Startsida" icon="home" />
@@ -115,13 +134,13 @@ h1 {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
 }
 .new-button:active {
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   scale: 0.96;
 }
 nav ul {
   padding: 0;
 }
-.divider{
+.divider {
   display: block;
   height: 1px;
   margin: 10px 0;
