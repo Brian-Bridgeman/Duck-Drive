@@ -153,6 +153,24 @@ async function loadFiles() {
   }
 }
 
+async function getFolderSize(folderPath) {
+  let size = 0;
+  const files = await fs.promises.readdir(folderPath);
+
+  for (const file of files) {
+    const filePath = path.join(folderPath, file);
+    const stats = await fs.promises.stat(filePath);
+
+    if (stats.isDirectory()) {
+      size += await getFolderSize(filePath);
+    } else {
+      size += stats.size;
+    }
+  }
+
+  return size;
+}
+
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);
 });
