@@ -88,7 +88,17 @@ app.post("/api/login", async (req, res) => {
     res.status(500).json({ error: "Login failed" });
   }
 });
-  
+app.post("/api/logout", (req, res) => {
+  req.session.destroy();
+  res.json({ message: "Logout successful" });
+});
+app.get("/api/auth/status", (req, res) => {
+  if (req.session.userId) {
+    res.json({ authenticated: true, username: req.session.userId });
+  } else {
+    res.json({ authenticated: false });
+  }
+});
 
 app.get("/api/files", async (req, res) => {
   try {
