@@ -44,7 +44,21 @@ async function deleteFile(filename) {
     console.error(err);
   }
 }
+async function uploadFiles(files) {
+  if (!files || !files.length) return;
 
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append("file", file);
+  }
+
+  await fetch("/api/upload", {
+    method: "POST",
+    body: formData,
+  });
+
+  await fetchFiles();
+}
 async function renameFile(oldName, newName) {
   try {
     const response = await fetch(`/api/files/${oldName}`, {
