@@ -15,6 +15,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distPath = path.join(__dirname, "..", "dist");
 app.use(express.static(distPath));
 app.use(express.json());
+app.use(session({
+  secret: '1337duck',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false  }
+}))
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -39,12 +45,6 @@ function formatSize(bytes) {
   return (bytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
 }
 
-app.use(session({
-  secret: '1337duck',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false  }
-}))
 function authMiddleware(req, res, next) {
   if (req.session.userId) {
     next();
@@ -105,15 +105,17 @@ app.get("/api/auth/status", (req, res) => {
 
 app.get("/api/files", authMiddleware, async (req, res) => {
   try {
-    const items = await loadFiles();
+    const userFolder = `./server/files/${req.session.userId}`;
+    const items = await fs.promises.readdir(userFolder);
     const itemList = await Promise.all(
       items.map(async (itemName) => {
-        const stats = await fs.promises.stat(`./server/files/${itemName}`);
+        const itemPath = `${userFolder}/${itemName}`;
+        const stats = await fs.promises.stat(itemPath);
         const isDirectory = stats.isDirectory();
 
         let size;
         if (isDirectory) {
-          const folderSize = await getFolderSize(`./server/files/${itemName}`);
+          const folderSize = await getFolderSize(itemPath);
           size = formatSize(folderSize);
         } else {
           size = formatSize(stats.size);
@@ -140,10 +142,11 @@ app.get("/api/files", authMiddleware, async (req, res) => {
   }
 });
 
-app.get("/api/files/:filename", async (req, res) => {
+app.get("/api/files/:filename", authMiddleware, async (req, res) => {
   try {
     const filename = path.basename(req.params.filename);
-    const filepath = path.resolve(`./server/files/${filename}`);
+    const userFolder = `./server/files/${req.session.userId}`;
+    const filepath = path.resolve(`${userFolder}/${filename}`);
 
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ error: "File not found" });
@@ -182,13 +185,14 @@ app.post("/api/upload", authMiddleware, upload.single("file"), (req, res) => {
   });
 });
 
-app.post("/api/folders", async (req, res) => {
+app.post("/api/folders", authMiddleware, async (req, res) => {
   try {
     const folderName = req.body.name;
     if (!folderName) {
       return res.status(400).json({ error: "Folder name is required" });
     }
-    const folderPath = path.resolve(`./server/files/${folderName}`);
+    const userFolder = `./server/files/${req.session.userId}`;
+    const folderPath = path.resolve(`${userFolder}/${folderName}`);
     if (fs.existsSync(folderPath)) {
       return res.status(409).json({ error: "Folder already exists" });
     }
@@ -199,19 +203,20 @@ app.post("/api/folders", async (req, res) => {
   }
 });
 
-app.put("/api/files/:filename", async (req, res) => {
+app.put("/api/files/:filename", authMiddleware, async (req, res) => {
   try {
     const oldFileName = path.basename(req.params.filename);
     const newFileNameInput = path.basename(req.body.newName);
     if (!newFileNameInput) {
       return res.status(400).json({ error: "New file name is required" });
     }
+    const userFolder = `./server/files/${req.session.userId}`;
     const extension = path.extname(oldFileName);
     const newFileName = newFileNameInput.endsWith(extension)
       ? newFileNameInput
       : newFileNameInput + extension;
-    const oldFilePath = path.resolve(`./server/files/${oldFileName}`);
-    const newFilePath = path.resolve(`./server/files/${newFileName}`);
+    const oldFilePath = path.resolve(`${userFolder}/${oldFileName}`);
+    const newFilePath = path.resolve(`${userFolder}/${newFileName}`);
     if (!fs.existsSync(oldFilePath)) {
       return res.status(404).json({ error: "File not found" });
     }
@@ -230,10 +235,11 @@ app.put("/api/files/:filename", async (req, res) => {
   }
 });
 
-app.delete("/api/files/:filename", async (req, res) => {
+app.delete("/api/files/:filename", authMiddleware, async (req, res) => {
   try {
     const filename = path.basename(req.params.filename);
-    const filepath = path.resolve(`./server/files/${filename}`);
+    const userFolder = `./server/files/${req.session.userId}`;
+    const filepath = path.resolve(`${userFolder}/${filename}`);
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ error: "File not found" });
     }
@@ -249,9 +255,10 @@ app.delete("/api/files/:filename", async (req, res) => {
   }
 });
 
-async function loadFiles() {
+async function loadFiles() { // används ej men behåller
   try {
-    const data = await fs.promises.readdir("./server/files");
+    const userFolder = `./server/files/${req.session.userId}`;
+    const data = await fs.promises.readdir(userFolder);
     return data;
   } catch (error) {
     console.error("Error loading files:", error);
