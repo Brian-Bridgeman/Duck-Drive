@@ -122,8 +122,12 @@ const fileFormatIcon = computed(() => {
 </script>
 
 <template>
-  <div class="file-component" :class="{ selected }" @click.stop="onFileSelect">
-    <div class="split">
+  <div
+    class="file-component file-grid"
+    :class="{ selected }"
+    @click.stop="onFileSelect"
+  >
+    <div class="split fileName">
       <img class="fileIcon" :src="fileFormatIcon" alt="" />
       <span v-if="!isEditing">{{ file.name }}</span>
       <input
@@ -138,10 +142,13 @@ const fileFormatIcon = computed(() => {
       />
     </div>
     <div class="split">
-      <span>{{ file.size }}</span>
+      <span>User icon</span>
     </div>
     <div class="split">
       <span>{{ file.uploadDate }}</span>
+    </div>
+    <div class="split">
+      <span>{{ file.size }}</span>
     </div>
     <div class="split icons">
       <button
@@ -177,28 +184,29 @@ const fileFormatIcon = computed(() => {
   background-color: white;
 }
 .file-component {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  align-items: center;
   border-bottom: 1px solid #6b6d71;
 }
 .file-component:hover {
   background-color: #ededed;
 }
+.file-grid {
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr 1fr auto;
+  align-items: center;
+}
 .split {
-  width: 25%;
-  box-sizing: border-box;
-  padding-top: 10px;
-  padding-bottom: 10px;
   display: flex;
   align-items: center;
-  cursor: default;
+  padding: 10px 0;
+  min-width: 0;
 }
 .split span {
   display: block;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  margin: 10px;
 }
 .fileBtn {
   width: 36px;

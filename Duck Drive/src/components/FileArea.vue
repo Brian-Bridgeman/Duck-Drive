@@ -109,17 +109,46 @@ defineExpose({ fetchFiles });
         @delete="deleteFile"
         @rename="renameFile"
       />
+    <div>
+      <SearchBar v-model="searchQuery" />
+      <div class="file-header file-grid">
+        <span>Name</span>
+        <span>Owner</span>
+        <span>Last modified</span>
+        <span>Size</span>
+        <span></span>
+      </div>
+      <div class="file-list">
+        <FileRow
+          v-for="file in filteredFiles"
+          :key="file.name"
+          :file="file"
+          :selected="file.name === selectedFile"
+          @select="selectFile"
+          @delete="deleteFile"
+          @rename="renameFile"
+        />
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
+.file-header {
+  margin: 20px 20px;
+  padding: 10px 20px;
+  font-weight: 600;
+  color: #6b6d71;
+  border-bottom: 1px solid #6b6d71;
+}
+.file-grid {
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+}
 .file-list {
   margin-top: 30px;
   margin-left: 20px;
   margin-right: 20px;
-}
-span {
-  margin-left: 70px;
 }
 </style>
