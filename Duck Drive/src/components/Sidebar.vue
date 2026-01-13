@@ -3,6 +3,8 @@ import SidebarButton from "./SidebarButton.vue";
 import { ref, inject } from "vue";
 import duckIcon from "@/assets/duck-drive-icon.png";
 import plusIcon from "@/assets/icons/plus.png";
+import addFolderIcon from "@/assets/icons/folder-plus-circle.png";
+import fileUploadIcon from "@/assets/icons/file-upload.png";
 
 const fileInput = ref(null);
 const refreshFiles = inject("refreshFiles", null);
@@ -64,8 +66,8 @@ async function createFolder() {
         <img :src="plusIcon" alt="Plus icon" class="plus-icon" /> Nytt
       </button>
       <div class="dropdown-menu" v-if="showMenu">
-        <button class="menu-item" @click="createFolder">Ny mapp</button>
-        <button class="menu-item" @click="openfilePicker">Ladda upp fil</button>
+        <button class="menu-item" @click="createFolder"><img :src="addFolderIcon" alt="Add folder icon" class="icon" width="20px" /> Ny mapp</button>
+        <button class="menu-item" @click="openfilePicker"><img :src="fileUploadIcon" alt="File upload icon" class="icon" width="20px" /> Ladda upp fil</button>
       </div>
     </div>
     <nav>
@@ -154,7 +156,9 @@ h1 {
 }
 
 .menu-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   padding: 12px 16px;
   background: none;
