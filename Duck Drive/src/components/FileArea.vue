@@ -7,11 +7,28 @@ import FileRow from "./FileRow.vue";
 const files = ref([]);
 const searchQuery = ref("");
 const selectedFile = ref(null);
+const isDragging = ref(false);
+const fileInput = ref(null);
 
 function selectFile(filename) {
   selectedFile.value = filename;
 }
-
+async function onChange(e) {
+  await uploadFiles(e.target.files);
+  fileInput.value.value = null;
+}
+function dragover(e) {
+  e.preventDefault();
+  isDragging.value = true;
+}
+function dragleave() {
+  isDragging.value = false;
+}
+async function drop(e) {
+  e.preventDefault();
+  isDragging.value = false;
+  await uploadFiles(e.dataTransfer.files);
+}
 async function fetchFiles() {
   try {
     const response = await fetch("/api/files");
@@ -94,21 +111,21 @@ defineExpose({ fetchFiles });
 </script>
 
 <template>
-  <section>
-    <SearchBar v-model="searchQuery" />
-    <span>Name</span>
-    <span>Size</span>
-    <span>Uploaded at</span>
-    <div class="file-list">
-      <FileRow
-        v-for="file in filteredFiles"
-        :key="file.name"
-        :file="file"
-        :selected="file.name === selectedFile"
-        @select="selectFile"
-        @delete="deleteFile"
-        @rename="renameFile"
-      />
+  <section
+    class="dropzone-container"
+    @dragover="dragover"
+    @dragleave="dragleave"
+    @drop="drop"
+    :class="{ dragging: isDragging }"
+  >
+    <input
+      ref="fileInput"
+      type="file"
+      multiple
+      class="hidden-input"
+      @change="onChange"
+    />
+
     <div>
       <SearchBar v-model="searchQuery" />
       <div class="file-header file-grid">
@@ -134,6 +151,24 @@ defineExpose({ fetchFiles });
 </template>
 
 <style scoped>
+.dropzone-container {
+  min-height: 100%;
+  padding: 4rem;
+  box-sizing: border-box;
+}
+.dropzone-container.dragging {
+  background-color: #e6f5ff;
+  outline: 2px solid #8ad0ff;
+  outline-offset: -2px;
+  border-radius: 1rem;
+}
+.hidden-input {
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
 .file-header {
   margin: 20px 20px;
   padding: 10px 20px;
