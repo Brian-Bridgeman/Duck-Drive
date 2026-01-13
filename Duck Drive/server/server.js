@@ -5,6 +5,7 @@ import fs from "fs";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
+import archiver from "archiver";
 const app = express();
 const port = 80;
 
@@ -78,7 +79,28 @@ app.get("/api/files/:filename", async (req, res) => {
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ error: "File not found" });
     }
-    res.sendFile(filepath);
+
+    const stats = await fs.promises.stat(filepath);
+
+    if (stats.isDirectory()) {
+      res.setHeader("Content-Type", "application/zip");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${filename}.zip"`
+      );
+
+      const archive = archiver("zip", { zlib: { level: 9 } });
+
+      archive.on("error", (err) => {
+        res.status(500).json({ error: "Failed to create zip" });
+      });
+
+      archive.pipe(res);
+      archive.directory(filepath, filename);
+      await archive.finalize();
+    } else {
+      res.sendFile(filepath);
+    }
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
