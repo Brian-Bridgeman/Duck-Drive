@@ -10,5 +10,13 @@
   {
     "username": "test",
     "password": "$2b$10$I3uiIZkqW/EUug5JBPWew.p.1eDsJJciVs5eobbzij695ZcAkMf26"
+  },
+  {
+    "username": "1234",
+    "password": "$2b$10$T6x2KuBai0VUEVudVKZnZOhFd8F3DH45/F64QtdIYv6JfFjpogoKW"
+  },
+  {
+    "username": "nyttkonto",
+    "password": "$2b$10$gf9nRU2A2mDilEjBHrZXrugAAbecZq.df.A.KALSW/PSyLIg2GOh."
   }
 ]

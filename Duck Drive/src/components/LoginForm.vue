@@ -7,9 +7,11 @@
     const password = ref("");
     const isRegistering = ref(false);
     const error = ref("");
+    const isSuccess = ref(false);
 
     async function handleSubmit() {
         error.value = "";
+        isSuccess.value = false;
         const endpoint = isRegistering.value? "/api/register" : "/api/login";
         try {
             const response = await fetch(endpoint, {
@@ -24,9 +26,11 @@
             const data = await response.json();
             if (!response.ok) {
                 error.value = data.error;
+                isSuccess.value = false;
                 return;
             }
             if (isRegistering.value) {
+                isSuccess.value = true;
                 error.value = 'Registrering lyckades!';
                 isRegistering.value = false;
                 username.value = "";
@@ -36,6 +40,7 @@
             }
         } catch (err) {
             error.value = "Connection error";
+            isSuccess.value = false;
         }
     }
 </script>
@@ -68,7 +73,7 @@
                         class="text-input"
                         />
                     </div>
-                    <p v-if="error" class="error">{{ error }}</p>
+                    <p v-if="error" class="error" :class="{ success: isSuccess}">{{ error }}</p>
                     <div class="button-container">
                         <button type="submit" class="primary-button">
                             {{ isRegistering ? 'Skapa konto' : 'Logga in' }}
@@ -177,6 +182,9 @@
         font-size: 0.9em;
         margin: -8px 0 0 0;
         text-align: left;
+    }
+    .error.success{
+        color: #0f9d58;
     }
     .button-container {
         display: flex;
