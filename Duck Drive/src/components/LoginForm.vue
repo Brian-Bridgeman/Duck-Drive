@@ -49,7 +49,9 @@
         <div class="login-box">
             <div class="left-section">
                 <img :src="duckIcon" alt="Duck icon" class="icon" />
-                    <h1>{{  isRegistering ? 'Skapa ditt konto' : 'Logga in' }}</h1>
+                <transition name="fade" mode="out-in">
+                    <h1 :key="isRegistering">{{  isRegistering ? 'Skapa konto' : 'Logga in' }}</h1>
+                </transition>
             </div>
 
             <div class="right-section">
@@ -75,12 +77,16 @@
                     </div>
                     <p v-if="error" class="error" :class="{ success: isSuccess}">{{ error }}</p>
                     <div class="button-container">
-                        <button type="submit" class="primary-button">
-                            {{ isRegistering ? 'Skapa konto' : 'Logga in' }}
+                          <button type="submit" class="primary-button">
+                            <Transition name="fade" mode="out-in">
+                                <span :key="isRegistering">{{ isRegistering ? 'Registrera' : 'Logga in' }}</span>
+                            </Transition>
                         </button>
                         
                         <button type="button" @click="isRegistering = !isRegistering" class="secondary-button">
-                            {{  isRegistering ? 'Har du redan ett konto? Logga in' : 'Inget konto? Registrera dig här' }}
+                            <Transition name="fade" mode="out-in">
+                                <span :key="isRegistering">{{  isRegistering ? 'Har du redan ett konto? Logga in' : 'Inget konto? Registrera dig här'}}</span>
+                            </Transition>
                         </button>
                     </div>
                 </form>
@@ -89,6 +95,23 @@
     </div>
 </template>
 <style scoped>
+    .fade-enter-active,
+    .fade-leave-active {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .fade-enter-from {
+    opacity: 0;
+    transform: translateY(-5px);
+    }   
+
+    .fade-leave-to {
+    opacity: 0;
+    transform: translateY(5px);
+    }
+    .primary-button span, .secondary-button span{
+    display: inline-block;
+    }   
     .login-container {
         display: flex;
         justify-content: center;
@@ -205,6 +228,9 @@
         transition: background-color 0.2s, box-shadow 0.2s;
         font-family: inherit;
         letter-spacing: 0.5px;
+        position: relative;
+        min-width: 130px;
+        text-align: center;
     }
     .primary-button:hover {
         background-color: #174ea6;
@@ -225,6 +251,9 @@
         transition: background-color 0.2s, border-color 0.2s;
         font-family: inherit;
         letter-spacing: 0.5px;
+        position: relative;
+        min-width: 280px;
+        text-align: center;
     }
     .secondary-button:hover{
         background-color: #1f232710;
