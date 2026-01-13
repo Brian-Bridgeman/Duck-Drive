@@ -32,7 +32,7 @@ async function drop(e) {
 }
 async function fetchFiles() {
   try {
-    const response = await fetch("/api/files");
+    const response = await fetch("/api/files", { credentials: "include" });
     if (!response.ok) {
       throw new Error("Failed to fetch files");
     }
@@ -50,7 +50,9 @@ onMounted(() => {
 async function deleteFile(filename) {
   try {
     const res = await fetch(`/api/files/${filename}`, {
+      credentials: "include",
       method: "DELETE",
+      credentials: "include",
     });
 
     if (!res.ok) {
@@ -73,6 +75,7 @@ async function uploadFiles(files) {
   await fetch("/api/upload", {
     method: "POST",
     body: formData,
+    credentials: "include",
   });
 
   await fetchFiles();
@@ -80,6 +83,7 @@ async function uploadFiles(files) {
 async function renameFile(oldName, newName) {
   try {
     const response = await fetch(`/api/files/${oldName}`, {
+      credentials: "include",
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
