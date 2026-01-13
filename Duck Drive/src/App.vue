@@ -2,19 +2,40 @@
 import Sidebar from "./components/Sidebar.vue";
 import FileArea from "./components/FileArea.vue";
 import SearchBar from "./components/SearchBar.vue";
-import { ref, provide } from "vue";
+import LoginForm from "./components/LoginForm.vue";
+import { ref, provide, onMounted } from "vue";
 
 const fileAreaRef = ref(null);
 const searchQuery = ref("");
+const currentUser = ref(null);
+const isAuthenticated = ref(false);
 
 provide("refreshFiles", () => {
   if (fileAreaRef.value) {
     fileAreaRef.value.fetchFiles();
   }
 });
+async function checkAuth() {
+  try {
+    const response = await fetch('/api/auth/status');
+    const data = await response.json();
+    isAuthenticated.value = data.authenticated;
+    currentUser.value = data.username;
+  } catch (error) {
+    console.error("auth check failed", error);
+  }
+}
+function handleLoginSuccess(username) {
+  isAuthenticated.value = true;
+  currentUser.value = username;
+}
+onMounted(() => {
+  checkAuth();
+});
 </script>
 <template>
-  <div class="app-container">
+  <LoginForm v-if="!isAuthenticated" @login-success="handleLoginSuccess" />
+  <div class="app-container" v-else>
     <Sidebar />
     <div class="content-wrapper">
       <SearchBar v-model="searchQuery" />
