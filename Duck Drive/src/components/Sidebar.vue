@@ -24,7 +24,7 @@ async function uploadFolder(event) {
   if (!files.length) return;
 
   const formData = new FormData();
-  files.forEach(file => {
+  files.forEach((file) => {
     formData.append("files", file);
     formData.append("path", file.webkitRelativePath);
   });
@@ -39,6 +39,7 @@ async function uploadFolder(event) {
   }
 
   event.target.value = null;
+  showMenu.value = false;
 }
 
 async function uploadFile(event) {
@@ -58,6 +59,7 @@ async function uploadFile(event) {
   }
 
   event.target.value = null;
+  showMenu.value = false;
 }
 
 async function createFolder() {
