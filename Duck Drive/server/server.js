@@ -6,6 +6,8 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import archiver from "archiver";
+import session from "express-session";
+import bcrypt from "bcrypt";
 const app = express();
 const port = 80;
 
@@ -33,6 +35,40 @@ function formatSize(bytes) {
     return (bytes / (1024 * 1024)).toFixed(2) + " MB";
   return (bytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
 }
+
+app.use(session({
+  secret: '1337duck',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false  }
+}))
+function authMiddleware(req, res, next) {
+  if (req.session.userId) {
+    next();
+  }
+  else {
+    res.status(401).json({ error: "Unauthorized" });
+  }
+}
+
+app.post("/api/register", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const usersData = await fs.promises.readFile('./server/users.json', 'utf-8');
+    const users = JSON.parse(usersData);
+
+    if (users.find(user => user.username === username)) {
+      return res.status(400).json({ error: "Username already exists" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    users.push({ username, password: hashedPassword });
+    await fs.promises.writeFile('./server/users.json', JSON.stringify(users, null, 2));
+    await fs.promises.mkdir(`./server/files/${username}`, { recursive: true });
+    res.json({ message: "User registered successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Register failed" });
+  }
+});
 
 app.get("/api/files", async (req, res) => {
   try {
