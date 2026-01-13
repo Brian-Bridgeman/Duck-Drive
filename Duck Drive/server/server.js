@@ -17,7 +17,10 @@ app.use(express.static(distPath));
 app.use(express.json());
 
 const storage = multer.diskStorage({
-  destination: "./server/files/",
+  destination: (req, file, cb) => {
+    const userFolder = `./server/files/${req.session.userId}`;
+    cb(null, userFolder);
+  },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
@@ -100,7 +103,7 @@ app.get("/api/auth/status", (req, res) => {
   }
 });
 
-app.get("/api/files", async (req, res) => {
+app.get("/api/files", authMiddleware, async (req, res) => {
   try {
     const items = await loadFiles();
     const itemList = await Promise.all(
@@ -172,7 +175,7 @@ app.get("/api/files/:filename", async (req, res) => {
   }
 });
 
-app.post("/api/upload", upload.single("file"), (req, res) => {
+app.post("/api/upload", authMiddleware, upload.single("file"), (req, res) => {
   res.json({
     message: "File uploaded successfully",
     filename: req.file.filename,
