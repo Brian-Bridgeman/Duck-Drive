@@ -6,7 +6,6 @@ const searchQuery = defineModel();
 </script>
 
 <template>
-  <h1>Välkommen till Duck Drive</h1>
   <div class="search-bar">
     <span class="search-icon"
       ><img :src="searchButton" alt="Search icon"
@@ -27,7 +26,8 @@ const searchQuery = defineModel();
   align-items: center;
   gap: 10px;
   max-width: 75%;
-  margin: 20px auto;
+  margin: 10px;
+  margin-left: 20px;
   padding: 10px 15px;
   background-color: #e9eef6;
   border-radius: 20px;

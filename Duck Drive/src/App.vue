@@ -1,11 +1,13 @@
 <script setup>
 import Sidebar from "./components/Sidebar.vue";
 import FileArea from "./components/FileArea.vue";
+import SearchBar from "./components/SearchBar.vue";
 import { ref, provide } from "vue";
 
 const fileAreaRef = ref(null);
+const searchQuery = ref("");
 
-provide('refreshFiles', () => {
+provide("refreshFiles", () => {
   if (fileAreaRef.value) {
     fileAreaRef.value.fetchFiles();
   }
@@ -14,9 +16,12 @@ provide('refreshFiles', () => {
 <template>
   <div class="app-container">
     <Sidebar />
-    <main class="main-content">
-      <FileArea ref="fileAreaRef" />
-    </main>
+    <div class="content-wrapper">
+      <SearchBar v-model="searchQuery" />
+      <main class="main-content">
+        <FileArea :search-query="searchQuery" ref="fileAreaRef" />
+      </main>
+    </div>
   </div>
 </template>
 <style>
@@ -33,6 +38,11 @@ body {
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
 }
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .app-container {
   display: flex;
   height: 100vh;
@@ -43,7 +53,6 @@ body {
   overflow: auto;
   margin-left: 20px;
   margin-right: 60px;
-  margin-top: 60px;
   margin-bottom: 20px;
   border-radius: 1rem;
   background-color: white;

@@ -1,14 +1,15 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import fuzzysort from "fuzzysort";
-import SearchBar from "./SearchBar.vue";
 import FileRow from "./FileRow.vue";
 
 const files = ref([]);
-const searchQuery = ref("");
 const selectedFile = ref(null);
 const isDragging = ref(false);
 const fileInput = ref(null);
+const props = defineProps({
+  searchQuery: String,
+});
 
 function selectFile(filename) {
   selectedFile.value = filename;
@@ -95,11 +96,11 @@ async function renameFile(oldName, newName) {
 }
 
 const filteredFiles = computed(() => {
-  if (!searchQuery.value) {
+  if (!props.searchQuery) {
     return files.value;
   }
 
-  const results = fuzzysort.go(searchQuery.value, files.value, {
+  const results = fuzzysort.go(props.searchQuery, files.value, {
     key: "name",
     threshold: -10000,
   });
@@ -127,7 +128,6 @@ defineExpose({ fetchFiles });
     />
 
     <div>
-      <SearchBar v-model="searchQuery" />
       <div class="file-header file-grid">
         <span>Name</span>
         <span>Owner</span>
@@ -153,7 +153,7 @@ defineExpose({ fetchFiles });
 <style scoped>
 .dropzone-container {
   min-height: 100%;
-  padding: 4rem;
+  padding: 1rem;
   box-sizing: border-box;
 }
 .dropzone-container.dragging {
@@ -170,7 +170,8 @@ defineExpose({ fetchFiles });
   height: 1px;
 }
 .file-header {
-  margin: 20px 20px;
+  margin-right: 20px;
+  margin-left: 20px;
   padding: 10px 20px;
   font-weight: 600;
   color: #6b6d71;
@@ -182,7 +183,6 @@ defineExpose({ fetchFiles });
   align-items: center;
 }
 .file-list {
-  margin-top: 30px;
   margin-left: 20px;
   margin-right: 20px;
 }
