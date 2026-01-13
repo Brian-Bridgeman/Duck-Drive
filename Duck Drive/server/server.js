@@ -27,28 +27,34 @@ app.get("/index.html", (req, res) => {
 
 app.get("/api/files", async (req, res) => {
   try {
-    const files = await loadFiles();
-    const fileList = await Promise.all(
-      files.map(async (filename) => {
-        const stats = await fs.promises.stat(`./server/files/${filename}`);
+    const items = await loadFiles();
+    const itemList = await Promise.all(
+      items.map(async (itemName) => {
+        const stats = await fs.promises.stat(`./server/files/${itemName}`);
+        const isDirectory = stats.isDirectory();
+
         return {
-          name: filename,
-          size:
-            stats.size < 1024
-              ? stats.size + " B"
-              : stats.size < 1024 * 1024
-              ? (stats.size / 1024).toFixed(2) + " KB"
-              : (stats.size / (1024 * 1024)).toFixed(2) + " MB",
+          name: itemName,
+          size: isDirectory
+            ? "-"
+            : stats.size < 1024
+            ? stats.size + " B"
+            : stats.size < 1024 * 1024
+            ? (stats.size / 1024).toFixed(2) + " KB"
+            : (stats.size / (1024 * 1024)).toFixed(2) + " MB",
           uploadDate:
             stats.birthtime.toLocaleDateString("sv-SE") +
             " " +
             stats.birthtime.toLocaleTimeString("sv-SE"),
-          type: filename.split(".").pop().toLowerCase(),
+          type: isDirectory
+            ? "folder"
+            : itemName.split(".").pop().toLowerCase(),
+          isFolder: isDirectory,
         };
       })
     );
 
-    res.json(fileList);
+    res.json(itemList);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
