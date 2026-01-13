@@ -69,6 +69,26 @@ app.post("/api/register", async (req, res) => {
     res.status(500).json({ error: "Register failed" });
   }
 });
+app.post("/api/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const usersData = await fs.promises.readFile('./server/users.json', 'utf-8');
+    const users = JSON.parse(usersData);
+    const user = users.find(user => user.username === username);
+    if (!user) {
+      return res.status(400).json({ error: "Invalid username or password" });
+    }
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(400).json({ error: "Invalid username or password" });
+    }
+    req.session.userId = username;
+    res.json({ message: "Login successful" });
+  } catch (error) {
+    res.status(500).json({ error: "Login failed" });
+  }
+});
+  
 
 app.get("/api/files", async (req, res) => {
   try {
