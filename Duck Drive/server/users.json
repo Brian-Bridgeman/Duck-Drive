@@ -18,5 +18,17 @@
   {
     "username": "nyttkonto",
     "password": "$2b$10$gf9nRU2A2mDilEjBHrZXrugAAbecZq.df.A.KALSW/PSyLIg2GOh."
+  },
+  {
+    "username": "testkonto",
+    "password": "$2b$10$6vZtgtIqI8rDISLj1/OU6.vymPvZPBNlPUA1SYS.c7zdnKZqSQjzW"
+  },
+  {
+    "username": "asdad",
+    "password": "$2b$10$XW/ipnPekWW83MO/4OCCpOZOtMLQ0Qwlf3ZImzXvlKmv5V5SWO6Kq"
+  },
+  {
+    "username": "1234444",
+    "password": "$2b$10$zCm3HjXgDI71xzfhG8MI9OpD7Vj3UAaRxjdmFb8KgfhIAHGb4TRCm"
   }
 ]

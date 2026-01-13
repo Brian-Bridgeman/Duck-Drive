@@ -77,17 +77,17 @@
                     </div>
                     <p v-if="error" class="error" :class="{ success: isSuccess}">{{ error }}</p>
                     <div class="button-container">
+                        <button type="button" @click="isRegistering = !isRegistering" class="secondary-button">
+                            <Transition name="fade" mode="out-in">
+                                <span :key="isRegistering">{{  isRegistering ? 'Har du redan ett konto? Logga in' : 'Inget konto? Registrera dig här'}}</span>
+                            </Transition>
+                        </button>
                           <button type="submit" class="primary-button">
                             <Transition name="fade" mode="out-in">
                                 <span :key="isRegistering">{{ isRegistering ? 'Registrera' : 'Logga in' }}</span>
                             </Transition>
                         </button>
                         
-                        <button type="button" @click="isRegistering = !isRegistering" class="secondary-button">
-                            <Transition name="fade" mode="out-in">
-                                <span :key="isRegistering">{{  isRegistering ? 'Har du redan ett konto? Logga in' : 'Inget konto? Registrera dig här'}}</span>
-                            </Transition>
-                        </button>
                     </div>
                 </form>
             </div>
@@ -121,24 +121,25 @@
     }
     .login-box{
         background-color: white;
-        padding: 40px;
+        padding: 48px;
         padding-top: 60px;
-        border-radius: 8px;
+        border-radius: 32px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         width: 700px;
         text-align: center;
         display: grid;
-        grid-template-columns: 200px 1fr;
-        gap: 40px;
+        grid-template-columns: 220px 1fr;
+        gap: 48px;
         max-width: 90vw;
+        border: 1px solid #dadce0;
     }
     .left-section{
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         justify-content: flex-start;
-        gap: 16px;
-        text-align: center;
+        gap: 8px;
+        text-align: left;
         padding-top: 0px;
         margin-top: -20px;
         margin-left: -20px;
@@ -152,17 +153,16 @@
         text-align: left;
     }
     .icon{
-        width: 80px;
-        height: 80px;
-        margin-bottom: 8px;
-        margin-left: -35px;
-        margin-top: -20px;
+        width: 75px;
+        height: 75px;
+        margin-bottom: 16px;
     }
     h1 {
         color: #202124;
         font-size: 2em;
         font-weight: 400;
         margin: 0 0 8px 0;
+        line-height: 1.333;
     }
     h2 {
         color: #5f6368;
@@ -180,7 +180,7 @@
     }
     .text-input{
         width: 100%;
-        padding: 13px 15px;
+        padding: 15px;
         border: 1px solid #dadce0;
         border-radius: 4px;
         font-size: 1em;
@@ -192,13 +192,14 @@
     .text-input:hover{
         border-color: #bdc1c6;
     }
+    /* Fixa */
     .text-input:focus{
-        border-color: #4285f4;
-        box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 1px #1a73e8;
         outline: none;
     }
     .text-input::placeholder{
-        color: #80868b;
+        color: #5f6368;
     }
     .error {
         color: #d93025;
@@ -233,18 +234,19 @@
         text-align: center;
     }
     .primary-button:hover {
-        background-color: #174ea6;
+        background-color: #1765cc;
         box-shadow: 0 2px 6px rgba(22, 105, 193, 0.4);
     }
     .primary-button:active {
         background-color: #0b3d91;
         box-shadow: 0 3px 6px rgba(11, 61, 145, 0.4);
+        transform: scale(0.98);
     }
     .secondary-button {
         padding: 10px 24px;
         background-color: transparent;
         color: #1a73e8;
-        border: 1px solid #dadce0;
+        border: none;
         border-radius: 30px;
         font-size: 0.9em;
         cursor: pointer;
@@ -257,11 +259,10 @@
     }
     .secondary-button:hover{
         background-color: #1f232710;
-        border-color: #8ab4f8;
     }
     .secondary-button:active{
-        background-color: #3c404311;
-        border-color: #669df6;
+        background-color: #36363611;
+        transform: scale(0.98);
     }
         @media (max-width: 768px) {
         .login-box {
@@ -275,6 +276,7 @@
             border-bottom: 1px solid #dadce0;
             padding-right: 0;
             padding-bottom: 24px;
+            align-items: center;
         }
         
         .button-container {
