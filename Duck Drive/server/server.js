@@ -25,6 +25,13 @@ app.get("/index.html", (req, res) => {
   res.redirect("/");
 });
 
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+  if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+  return (bytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
+}
+
 app.get("/api/files", async (req, res) => {
   try {
     const items = await loadFiles();
@@ -32,16 +39,18 @@ app.get("/api/files", async (req, res) => {
       items.map(async (itemName) => {
         const stats = await fs.promises.stat(`./server/files/${itemName}`);
         const isDirectory = stats.isDirectory();
+        
+        let size;
+        if (isDirectory) {
+          const folderSize = await getFolderSize(`./server/files/${itemName}`);
+          size = formatSize(folderSize);
+        } else {
+          size = formatSize(stats.size);
+        }
 
         return {
           name: itemName,
-          size: isDirectory
-            ? "-"
-            : stats.size < 1024
-            ? stats.size + " B"
-            : stats.size < 1024 * 1024
-            ? (stats.size / 1024).toFixed(2) + " KB"
-            : (stats.size / (1024 * 1024)).toFixed(2) + " MB",
+          size: size,
           uploadDate:
             stats.birthtime.toLocaleDateString("sv-SE") +
             " " +
@@ -156,18 +165,18 @@ async function loadFiles() {
 async function getFolderSize(folderPath) {
   let size = 0;
   const files = await fs.promises.readdir(folderPath);
-
+  
   for (const file of files) {
     const filePath = path.join(folderPath, file);
     const stats = await fs.promises.stat(filePath);
-
+    
     if (stats.isDirectory()) {
       size += await getFolderSize(filePath);
     } else {
       size += stats.size;
     }
   }
-
+  
   return size;
 }
 
