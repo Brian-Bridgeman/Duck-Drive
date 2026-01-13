@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "archiver": "^7.0.1",
+    "bcrypt": "^6.0.0",
     "express": "^5.2.1",
+    "express-session": "^1.18.2",
     "fuzzysort": "^3.1.0",
     "multer": "^2.0.2",
     "vue": "^3.5.26"
