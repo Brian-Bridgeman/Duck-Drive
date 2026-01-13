@@ -5,13 +5,40 @@ import duckIcon from "@/assets/duck-drive-icon.png";
 import plusIcon from "@/assets/icons/plus.png";
 import addFolderIcon from "@/assets/icons/folder-plus-circle.png";
 import fileUploadIcon from "@/assets/icons/file-upload.png";
+import folderUploadIcon from "@/assets/icons/folder-upload.png";
 
 const fileInput = ref(null);
+const folderInput = ref(null);
 const refreshFiles = inject("refreshFiles", null);
 const showMenu = ref(false);
 
 function openfilePicker() {
   fileInput.value.click();
+}
+
+function openFolderPicker() {
+  folderInput.value.click();
+}
+async function uploadFolder(event) {
+  const files = Array.from(event.target.files);
+  if (!files.length) return;
+
+  const formData = new FormData();
+  files.forEach(file => {
+    formData.append("files", file);
+    formData.append("path", file.webkitRelativePath);
+  });
+
+  await fetch("/api/upload-folder", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (refreshFiles) {
+    await refreshFiles();
+  }
+
+  event.target.value = null;
 }
 
 async function uploadFile(event) {
@@ -61,13 +88,47 @@ async function createFolder() {
       @change="uploadFile"
       style="display: none"
     />
+    <input
+      type="file"
+      ref="folderInput"
+      @change="uploadFolder"
+      style="display: none"
+      webkitdirectory=""
+      directory=""
+      multiple
+    />
     <div class="new-button-container">
       <button class="new-button" @click="showMenu = !showMenu">
         <img :src="plusIcon" alt="Plus icon" class="plus-icon" /> Nytt
       </button>
       <div class="dropdown-menu" v-if="showMenu">
-        <button class="menu-item" @click="createFolder"><img :src="addFolderIcon" alt="Add folder icon" class="icon" width="20px" /> Ny mapp</button>
-        <button class="menu-item" @click="openfilePicker"><img :src="fileUploadIcon" alt="File upload icon" class="icon" width="20px" /> Ladda upp fil</button>
+        <button class="menu-item" @click="createFolder">
+          <img
+            :src="addFolderIcon"
+            alt="Add folder icon"
+            class="icon"
+            width="20px"
+          />
+          Ny mapp
+        </button>
+        <button class="menu-item" @click="openfilePicker">
+          <img
+            :src="fileUploadIcon"
+            alt="File upload icon"
+            class="icon"
+            width="20px"
+          />
+          Ladda upp fil
+        </button>
+        <button class="menu-item" @click="openFolderPicker">
+          <img
+            :src="folderUploadIcon"
+            alt="Folder upload icon"
+            class="icon"
+            width="20px"
+          />
+          Ladda upp mapp
+        </button>
       </div>
     </div>
     <nav>
@@ -89,7 +150,6 @@ async function createFolder() {
   </aside>
 </template>
 <style scoped>
-
 .sidebar {
   width: 200px;
   background-color: #f5f5f5;

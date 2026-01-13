@@ -69,7 +69,9 @@ const downloadLink = ref(null);
 
 async function downloadFile(filename) {
   try {
-    const response = await fetch(`/api/files/${encodeURIComponent(filename)}`, { credentials: "include" });
+    const response = await fetch(`/api/files/${encodeURIComponent(filename)}`, {
+      credentials: "include",
+    });
     if (!response.ok) {
       throw new Error("Failed to download file");
     }
