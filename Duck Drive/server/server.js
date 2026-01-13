@@ -75,6 +75,23 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   });
 });
 
+app.post("/api/folders", async (req, res) => {
+  try {
+    const folderName = req.body.name;
+    if (!folderName) {
+      return res.status(400).json({ error: "Folder name is required" });
+    }
+    const folderPath = path.resolve(`./server/files/${folderName}`);
+    if (fs.existsSync(folderPath)) {
+      return res.status(409).json({ error: "Folder already exists" });
+    }
+    await fs.promises.mkdir(folderPath);
+    res.json({ message: "Folder created successfully", name: folderName });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.put("/api/files/:filename", async (req, res) => {
   try {
     const oldFileName = path.basename(req.params.filename);
@@ -94,15 +111,15 @@ app.put("/api/files/:filename", async (req, res) => {
     if (fs.existsSync(newFilePath)) {
       return res.status(409).json({ error: "File already exists" });
     }
-    
+
     await fs.promises.rename(oldFilePath, newFilePath);
     res.json({
       message: "File renamed",
       oldName: oldFileName,
       newName: newFileName,
-    })
+    });
   } catch (error) {
-    res.status(500).json({ error: "Server erroR" });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
