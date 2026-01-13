@@ -15,12 +15,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distPath = path.join(__dirname, "..", "dist");
 app.use(express.static(distPath));
 app.use(express.json());
-app.use(session({
-  secret: '1337duck',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false  }
-}))
+app.use(
+  session({
+    secret: "1337duck",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false },
+  })
+);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -48,8 +50,7 @@ function formatSize(bytes) {
 function authMiddleware(req, res, next) {
   if (req.session.userId) {
     next();
-  }
-  else {
+  } else {
     res.status(401).json({ error: "Unauthorized" });
   }
 }
@@ -57,15 +58,21 @@ function authMiddleware(req, res, next) {
 app.post("/api/register", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const usersData = await fs.promises.readFile('./server/users.json', 'utf-8');
+    const usersData = await fs.promises.readFile(
+      "./server/users.json",
+      "utf-8"
+    );
     const users = JSON.parse(usersData);
 
-    if (users.find(user => user.username === username)) {
+    if (users.find((user) => user.username === username)) {
       return res.status(400).json({ error: "Username already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     users.push({ username, password: hashedPassword });
-    await fs.promises.writeFile('./server/users.json', JSON.stringify(users, null, 2));
+    await fs.promises.writeFile(
+      "./server/users.json",
+      JSON.stringify(users, null, 2)
+    );
     await fs.promises.mkdir(`./server/files/${username}`, { recursive: true });
     res.json({ message: "User registered successfully" });
   } catch (error) {
@@ -75,9 +82,12 @@ app.post("/api/register", async (req, res) => {
 app.post("/api/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const usersData = await fs.promises.readFile('./server/users.json', 'utf-8');
+    const usersData = await fs.promises.readFile(
+      "./server/users.json",
+      "utf-8"
+    );
     const users = JSON.parse(usersData);
-    const user = users.find(user => user.username === username);
+    const user = users.find((user) => user.username === username);
     if (!user) {
       return res.status(400).json({ error: "Invalid username or password" });
     }
@@ -185,6 +195,42 @@ app.post("/api/upload", authMiddleware, upload.single("file"), (req, res) => {
   });
 });
 
+app.post(
+  "/api/upload-folder",
+  authMiddleware,
+  upload.array("files"),
+  async (req, res) => {
+    try {
+      let paths = req.body.path;
+      const files = req.files;
+
+      if (!Array.isArray(paths)) {
+        paths = [paths];
+      }
+
+      for (let i = 0; i < files.length; i++) {
+        const relativePath = paths[i] || files[i].originalname;
+        const targetPath = path.join(
+          "./server/files",
+          req.session.userId,
+          relativePath
+        );
+        const targetDir = path.dirname(targetPath);
+
+        if (!fs.existsSync(targetDir)) {
+          await fs.promises.mkdir(targetDir, { recursive: true });
+        }
+        await fs.promises.rename(files[i].path, targetPath);
+      }
+
+      res.json({ message: "Folder uploaded successfully" });
+    } catch (error) {
+      console.error("Error uploading folder:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
+
 app.post("/api/folders", authMiddleware, async (req, res) => {
   try {
     const folderName = req.body.name;
@@ -255,7 +301,8 @@ app.delete("/api/files/:filename", authMiddleware, async (req, res) => {
   }
 });
 
-async function loadFiles() { // används ej men behåller
+async function loadFiles() {
+  // används ej men behåller
   try {
     const userFolder = `./server/files/${req.session.userId}`;
     const data = await fs.promises.readdir(userFolder);
