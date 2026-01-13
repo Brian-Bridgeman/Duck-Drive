@@ -28,7 +28,8 @@ app.get("/index.html", (req, res) => {
 function formatSize(bytes) {
   if (bytes < 1024) return bytes + " B";
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
-  if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+  if (bytes < 1024 * 1024 * 1024)
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
   return (bytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
 }
 
@@ -39,7 +40,7 @@ app.get("/api/files", async (req, res) => {
       items.map(async (itemName) => {
         const stats = await fs.promises.stat(`./server/files/${itemName}`);
         const isDirectory = stats.isDirectory();
-        
+
         let size;
         if (isDirectory) {
           const folderSize = await getFolderSize(`./server/files/${itemName}`);
@@ -145,8 +146,13 @@ app.delete("/api/files/:filename", async (req, res) => {
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ error: "File not found" });
     }
-    await fs.promises.unlink(filepath);
-    res.json({ message: "File deleted successfully" });
+    const stats = await fs.promises.stat(filepath);
+    if (stats.isDirectory()) {
+      await fs.promises.rm(filepath, { recursive: true, force: true });
+    } else {
+      await fs.promises.unlink(filepath);
+    }
+    res.json({ message: "File or folder deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -165,18 +171,18 @@ async function loadFiles() {
 async function getFolderSize(folderPath) {
   let size = 0;
   const files = await fs.promises.readdir(folderPath);
-  
+
   for (const file of files) {
     const filePath = path.join(folderPath, file);
     const stats = await fs.promises.stat(filePath);
-    
+
     if (stats.isDirectory()) {
       size += await getFolderSize(filePath);
     } else {
       size += stats.size;
     }
   }
-  
+
   return size;
 }
 
