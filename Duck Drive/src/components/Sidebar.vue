@@ -59,9 +59,15 @@ async function createFolder() {
       @change="uploadFile"
       style="display: none"
     />
-    <button class="new-button" @click="openfilePicker">
-      <img :src="plusIcon" alt="Plus icon" class="plus-icon" /> Nytt
-    </button>
+    <div class="new-button-container">
+      <button class="new-button" @click="showMenu = !showMenu">
+        <img :src="plusIcon" alt="Plus icon" class="plus-icon" /> Nytt
+      </button>
+      <div class="dropdown-menu" v-if="showMenu">
+        <button class="menu-item" @click="createFolder">Ny mapp</button>
+        <button class="menu-item" @click="openfilePicker">Ladda upp fil</button>
+      </div>
+    </div>
     <nav>
       <ul>
         <SidebarButton label="Startsida" icon="home" />
@@ -81,7 +87,7 @@ async function createFolder() {
   </aside>
 </template>
 <style scoped>
-/*stylingen för sidebar kan vi justera senare, bara lagt in grundläggande */
+
 .sidebar {
   width: 200px;
   background-color: #f5f5f5;
@@ -127,6 +133,45 @@ h1 {
   height: 1.2em;
   margin-right: 8px;
   vertical-align: middle;
+}
+
+.new-button-container {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 5px 10px #00000033;
+  z-index: 10;
+  min-width: 150px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95em;
+  color: #444746;
+  transition: background-color 0.15s;
+}
+
+.menu-item:hover {
+  background-color: #f0f0f0;
+}
+
+.menu-item:active {
+  background-color: #e8e8e8;
 }
 
 .new-button:hover {
