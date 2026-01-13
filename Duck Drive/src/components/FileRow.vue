@@ -11,6 +11,7 @@ import zipIcon from "@/assets/icons/file-zipper.png";
 import videoIcon from "@/assets/icons/clapperboard.png";
 import documentIcon from "@/assets/icons/document.png";
 import fileEditIcon from "@/assets/icons/pencil.png";
+import folderIcon from "@/assets/icons/folder.png";
 const emit = defineEmits(["delete", "select", "rename"]);
 
 const props = defineProps({
@@ -115,6 +116,8 @@ const fileFormatIcon = computed(() => {
     case "xml":
     case "md":
       return documentIcon;
+    case "folder":
+      return folderIcon;
     default:
       return fileIcon;
   }

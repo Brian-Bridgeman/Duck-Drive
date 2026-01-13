@@ -1,5 +1,3 @@
-<!--TODO: Lägga till api-anrop vid klick på button för uppladdning-->
-
 <script setup>
 import SidebarButton from "./SidebarButton.vue";
 import { ref, inject } from "vue";
