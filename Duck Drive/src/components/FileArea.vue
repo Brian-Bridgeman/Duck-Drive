@@ -123,7 +123,11 @@ async function uploadFiles(files, isFolder = false) {
     }
   }
 
-  await fetch(isFolder ? "/api/upload-folder" : "/api/upload", {
+  const params = currentPath.value
+    ? `?path=${encodeURIComponent(currentPath.value)}`
+    : "";
+
+  await fetch((isFolder ? "/api/upload-folder" : "/api/upload") + params, {
     method: "POST",
     body: formData,
     credentials: "include",
