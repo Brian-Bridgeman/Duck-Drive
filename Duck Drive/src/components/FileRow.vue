@@ -12,7 +12,7 @@ import videoIcon from "@/assets/icons/clapperboard.png";
 import documentIcon from "@/assets/icons/document.png";
 import fileEditIcon from "@/assets/icons/pencil.png";
 import folderIcon from "@/assets/icons/folder.png";
-const emit = defineEmits(["delete", "select", "rename"]);
+const emit = defineEmits(["delete", "select", "rename", "visible"]);
 
 const props = defineProps({
   file: {
@@ -35,6 +35,7 @@ function onDeleteClick() {
 function onFileSelect() {
   emit("select", props.file.name);
 }
+
 function startEditing() {
   onFileSelect();
   isEditing.value = true;
@@ -87,6 +88,9 @@ async function downloadFile(filename) {
     console.error("Error downloading file:", error);
   }
 }
+function displayFileContent() {
+  emit("visible", props.file);
+}
 
 const fileFormatIcon = computed(() => {
   switch (props.file.type) {
@@ -117,6 +121,7 @@ const fileFormatIcon = computed(() => {
     case "log":
     case "xml":
     case "md":
+    case "json":
       return documentIcon;
     case "folder":
       return folderIcon;
@@ -131,6 +136,7 @@ const fileFormatIcon = computed(() => {
     class="file-component file-grid"
     :class="{ selected }"
     @click.stop="onFileSelect"
+    @dblclick="displayFileContent"
   >
     <div class="split fileName">
       <img class="fileIcon" :src="fileFormatIcon" alt="" />
@@ -206,6 +212,7 @@ const fileFormatIcon = computed(() => {
   align-items: center;
   padding: 10px 0;
   min-width: 0;
+  cursor: default;
 }
 .split span {
   display: block;

@@ -2,11 +2,14 @@
 import { ref, onMounted, computed } from "vue";
 import fuzzysort from "fuzzysort";
 import FileRow from "./FileRow.vue";
+import DialogWindow from "./DialogWindow.vue";
 
 const files = ref([]);
 const selectedFile = ref(null);
 const isDragging = ref(false);
 const fileInput = ref(null);
+const isVisible = ref(false);
+const activeFile = ref(null);
 const props = defineProps({
   searchQuery: String,
 });
@@ -98,7 +101,13 @@ async function renameFile(oldName, newName) {
     console.error(error);
   }
 }
-
+function openFile(file) {
+  activeFile.value = file;
+  isVisible.value = true;
+}
+function closeFile() {
+  isVisible.value = false;
+}
 const filteredFiles = computed(() => {
   if (!props.searchQuery) {
     return files.value;
@@ -130,7 +139,9 @@ defineExpose({ fetchFiles });
       class="hidden-input"
       @change="onChange"
     />
-
+    <div v-if="isVisible">
+      <DialogWindow @close="closeFile" :file="activeFile" />
+    </div>
     <div>
       <div class="file-header file-grid">
         <span>Name</span>
@@ -139,6 +150,7 @@ defineExpose({ fetchFiles });
         <span>Size</span>
         <span></span>
       </div>
+
       <div class="file-list">
         <FileRow
           v-for="file in filteredFiles"
@@ -148,6 +160,7 @@ defineExpose({ fetchFiles });
           @select="selectFile"
           @delete="deleteFile"
           @rename="renameFile"
+          @visible="openFile"
         />
       </div>
     </div>
