@@ -26,8 +26,12 @@ app.use(
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const userFolder = `./server/files/${req.session.userId}`;
-    cb(null, userFolder);
+    try {
+      const uploadPath = resolveUserPath(req, req.query.path || "");
+      cb(null, uploadPath);
+    } catch (err) {
+      cb(err);
+    }
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -218,7 +222,11 @@ app.post(
       }
 
       for (let i = 0; i < files.length; i++) {
-        const relativePath = paths[i] || files[i].originalname;
+        const basePath = req.query.path || "";
+        const relativePathRaw = paths[i] || files[i].originalname;
+        const relativePath = basePath
+          ? path.join(basePath, relativePathRaw)
+          : relativePathRaw;
         const targetPath = path.join(
           "./server/files",
           req.session.userId,
