@@ -31,7 +31,41 @@ function dragleave() {
 async function drop(e) {
   e.preventDefault();
   isDragging.value = false;
-  await uploadFiles(e.dataTransfer.files);
+  
+  const items = e.dataTransfer.items;
+  if (items && items.length && items[0].webkitGetAsEntry) {
+    const allFiles = [];
+    const traverse = (entry, path = "") => {
+      return new Promise((resolve) => {
+        if (entry.isFile) {
+          entry.file((file) => {
+            file.relativePath = path + file.name;
+            allFiles.push(file);
+            resolve();
+          });
+        } else if (entry.isDirectory) {
+          const reader = entry.createReader();
+          reader.readEntries(async (entries) => {
+            for (const ent of entries) {
+              await traverse(ent, path + entry.name + "/");
+            }
+            resolve();
+          });
+        } else {
+          resolve();
+        }
+      });
+    };
+    const promises = [];
+    for (let i = 0; i < items.length; i++) {
+      const entry = items[i].webkitGetAsEntry();
+      if (entry) promises.push(traverse(entry));
+    }
+    await Promise.all(promises);
+    await uploadFiles(allFiles, true);
+  } else {
+    await uploadFiles(e.dataTransfer.files);
+  }
 }
 async function fetchFiles() {
   try {
@@ -67,15 +101,20 @@ async function deleteFile(filename) {
     console.error(err);
   }
 }
-async function uploadFiles(files) {
+async function uploadFiles(files, isFolder = false) {
   if (!files || !files.length) return;
 
   const formData = new FormData();
   for (const file of files) {
-    formData.append("file", file);
+    if (isFolder && (file.relativePath || file.webkitRelativePath)) {
+      formData.append("files", file);
+      formData.append("path", file.relativePath || file.webkitRelativePath);
+    } else {
+      formData.append("file", file);
+    }
   }
 
-  await fetch("/api/upload", {
+  await fetch(isFolder ? "/api/upload-folder" : "/api/upload", {
     method: "POST",
     body: formData,
     credentials: "include",
