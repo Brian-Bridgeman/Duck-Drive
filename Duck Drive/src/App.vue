@@ -16,6 +16,7 @@ import fileEditIcon from "@/assets/icons/pencil.png";
 import folderIcon from "@/assets/icons/folder.png";
 import { ref, provide, onMounted } from "vue";
 import { useDark, useToggle } from "@vueuse/core";
+import UserDropdown from "./components/UserDropdown.vue";
 
 const fileAreaRef = ref(null);
 const searchQuery = ref("");
@@ -61,12 +62,15 @@ onMounted(() => {
     <div class="app-container" v-else>
       <Sidebar />
       <div class="content-wrapper">
-        <SearchBar v-model="searchQuery" />
-        <label class="switch">
-          <input type="checkbox" @click="toggleDark()" />
-          <span class="slider round"></span>
-        </label>
-
+        <div class="header-bar">
+          <SearchBar v-model="searchQuery" />
+          <label class="switch">
+            <input type="checkbox" @click="toggleDark()" />
+            <span class="slider round"></span>
+          </label>
+          <UserDropdown />
+        </div>
+          
         <main class="main-content">
           <FileArea :search-query="searchQuery" ref="fileAreaRef" />
         </main>
@@ -87,6 +91,15 @@ body {
   padding: 0;
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
+}
+.header-bar{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 4em;
+}
+.header-bar .switch {
+  margin-left: auto;
 }
 .content-wrapper {
   flex: 1;
@@ -110,12 +123,14 @@ body {
 
 /* Dark mode toggle switch */
 .switch {
-  position: absolute;
+  position: relative;
   display: inline-block;
   width: 60px;
   height: 34px;
-  right: 70px;
-  top: 15px;
+}
+.header-bar .search-bar {
+  max-width: 50%;
+  flex: 1;
 }
 
 .switch input {
