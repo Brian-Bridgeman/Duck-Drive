@@ -34,6 +34,7 @@ provide("refreshFiles", () => {
     fileAreaRef.value.fetchFiles();
   }
 });
+provide("searchQuery", searchQuery);
 async function checkAuth() {
   try {
     const response = await fetch("/api/auth/status");
