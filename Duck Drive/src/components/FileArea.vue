@@ -10,6 +10,7 @@ const isDragging = ref(false);
 const fileInput = ref(null);
 const isVisible = ref(false);
 const activeFile = ref(null);
+const currentPath = inject("currentPath", ref(""));
 
 const searchQuery = inject("searchQuery");
 
@@ -68,7 +69,13 @@ async function drop(e) {
 }
 async function fetchFiles() {
   try {
-    const response = await fetch("/api/files", { credentials: "include" });
+    const params = currentPath.value
+      ? `?path=${encodeURIComponent(currentPath.value)}`
+      : "";
+
+    const response = await fetch(`/api/files${params}`, {
+      credentials: "include",
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch files");
     }
@@ -85,10 +92,13 @@ onMounted(() => {
 
 async function deleteFile(filename) {
   try {
-    const res = await fetch(`/api/files/${filename}`, {
+    const params = currentPath.value
+      ? `?path=${encodeURIComponent(currentPath.value)}`
+      : "";
+
+    const res = await fetch(`/api/files/${filename}${params}`, {
       credentials: "include",
       method: "DELETE",
-      credentials: "include",
     });
 
     if (!res.ok) {
@@ -123,7 +133,11 @@ async function uploadFiles(files, isFolder = false) {
 }
 async function renameFile(oldName, newName) {
   try {
-    const response = await fetch(`/api/files/${oldName}`, {
+    const params = currentPath.value
+      ? `?path=${encodeURIComponent(currentPath.value)}`
+      : "";
+
+    const response = await fetch(`/api/files/${oldName}${params}`, {
       credentials: "include",
       method: "PUT",
       headers: {
@@ -146,6 +160,24 @@ function openFile(file) {
 function closeFile() {
   isVisible.value = false;
 }
+
+function openFolder(folder) {
+  if (!(folder.isFolder || folder.type === "folder")) return;
+
+  currentPath.value = currentPath.value
+    ? `${currentPath.value}/${folder.name}`
+    : folder.name;
+  fetchFiles();
+}
+
+function goBack() {
+  if (!currentPath.value) return;
+  const parts = currentPath.value.split("/");
+  parts.pop();
+  currentPath.value = parts.join("/");
+  fetchFiles();
+}
+
 const filteredFiles = computed(() => {
   if (!searchQuery.value) {
     return files.value;
@@ -181,6 +213,10 @@ defineExpose({ fetchFiles });
       <DialogWindow @close="closeFile" :file="activeFile" />
     </div>
     <div>
+      <div class="navigation">
+        <button @click="goBack" :disabled="!currentPath">Tillbaka</button>
+        <span class="path-label">{{ currentPath }}</span>
+      </div>
       <div class="file-header file-grid">
         <span>Name</span>
         <span>Owner</span>
@@ -199,6 +235,7 @@ defineExpose({ fetchFiles });
           @delete="deleteFile"
           @rename="renameFile"
           @visible="openFile"
+          @open-folder="openFolder"
         />
       </div>
     </div>
