@@ -252,5 +252,6 @@ const fileFormatIcon = computed(() => {
 .fileIcon {
   width: 20px;
   margin: 10px;
+  user-select: none;
 }
 </style>

@@ -11,6 +11,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["close"]);
 const textContent = ref("");
+const isLoading = ref(true);
 function closeWindow() {
   emit("close");
 }
@@ -49,12 +50,14 @@ const fileFormat = computed(() => {
 });
 watch(
   () => props.file,
+
   async (file) => {
     if (!file) return;
 
+    isLoading.value = true;
     const response = await fetch(`/api/files/${file.name}`);
     textContent.value = await response.text();
-    console.log(JSON.stringify(textContent.value.slice(0, 40)));
+    isLoading.value = false;
   },
   { immediate: true }
 );
@@ -63,51 +66,87 @@ watch(
 <template>
   <div class="overlay">
     <div class="popup-window">
-      <video
-        v-if="fileFormat === 'video'"
-        controls
-        :src="`/api/files/${file.name}`"
-      ></video>
-      <img
-        v-if="fileFormat === 'picture'"
-        class="imageDisplay"
-        :src="`/api/files/${file.name}`"
-        alt=""
-      />
-      <div v-if="fileFormat === 'audio'" class="audio">
-        <div class="audioTemplate">
-          <img :src="audioIcon" alt="" class="headphoneImg" />
+      <div v-if="isLoading" class="loader">
+        <div class="spinner"></div>
+      </div>
+      <div v-show="!isLoading">
+        <video
+          v-if="fileFormat === 'video'"
+          controls
+          :src="`/api/files/${file.name}`"
+          @loadeddata="isLoading = false"
+        ></video>
+        <img
+          v-if="fileFormat === 'picture'"
+          class="imageDisplay"
+          :src="`/api/files/${file.name}`"
+          @load="isLoading = false"
+        />
+        <div
+          v-if="fileFormat === 'audio'"
+          class="audio"
+          @loadeddata="isLoading = false"
+        >
+          <div class="audioTemplate">
+            <img :src="audioIcon" alt="" class="headphoneImg" />
+          </div>
+          <audio controls :src="`/api/files/${file.name}`"></audio>
         </div>
-        <audio controls :src="`/api/files/${file.name}`"></audio>
+
+        <div v-if="fileFormat === 'pdf'" class="pdf" @load="isLoading = false">
+          <object
+            :data="`/api/files/${file.name}`"
+            width="800"
+            height="500"
+          ></object>
+        </div>
+
+        <pre v-if="fileFormat === 'text'" class="text-preview">{{
+          textContent
+        }}</pre>
+
+        <div
+          v-if="fileFormat === 'cantDisplay'"
+          class="cantDisplay"
+          @load="isLoading = false"
+        >
+          <img :src="cantDisplay" alt="" class="cantDisplayIcon" />
+          <span>This file cannot be displayed</span>
+        </div>
+
+        <button
+          class="close"
+          :style="{ backgroundImage: `url(${closeIcon})` }"
+          @click="closeWindow"
+        ></button>
       </div>
-
-      <div v-if="fileFormat === 'pdf'" class="pdf">
-        <object
-          :data="`/api/files/${file.name}`"
-          width="800"
-          height="500"
-        ></object>
-      </div>
-
-      <pre v-if="fileFormat === 'text'" class="text-preview">{{
-        textContent
-      }}</pre>
-
-      <div v-if="fileFormat === 'cantDisplay'" class="cantDisplay">
-        <img :src="cantDisplay" alt="" class="cantDisplayIcon" />
-        <span>This file cannot be displayed</span>
-      </div>
-
-      <button
-        class="close"
-        :style="{ backgroundImage: `url(${closeIcon})` }"
-        @click="closeWindow"
-      ></button>
     </div>
   </div>
 </template>
 
 <style scoped>
+.loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .imageDisplay {
   border-radius: 1rem;
   max-width: 50vw;
@@ -184,7 +223,7 @@ audio {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 video {
-  max-height: 75%;
+  max-height: 75vh;
   border-radius: 1rem;
 }
 .close {
