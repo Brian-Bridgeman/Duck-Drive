@@ -110,6 +110,7 @@ watch(
 <style scoped>
 .imageDisplay {
   border-radius: 1rem;
+  max-width: 50vw;
 }
 .cantDisplayIcon {
   height: 40%;
@@ -183,7 +184,7 @@ audio {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 video {
-  height: 75%;
+  max-height: 75%;
   border-radius: 1rem;
 }
 .close {
