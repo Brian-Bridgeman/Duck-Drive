@@ -219,6 +219,7 @@ const fileFormatIcon = computed(() => {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  user-select: none;
 }
 .fileBtn {
   width: 36px;
