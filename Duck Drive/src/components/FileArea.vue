@@ -169,6 +169,15 @@ function openFolder(folder) {
     : folder.name;
   fetchFiles();
 }
+
+function goBack() {
+  if (!currentPath.value) return;
+  const parts = currentPath.value.split("/");
+  parts.pop();
+  currentPath.value = parts.join("/");
+  fetchFiles();
+}
+
 const filteredFiles = computed(() => {
   if (!searchQuery.value) {
     return files.value;
