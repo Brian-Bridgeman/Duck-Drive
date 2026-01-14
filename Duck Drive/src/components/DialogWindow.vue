@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, computed } from "vue";
-import closeIcon from "@/assets/icons/cross.png";
+import closeIcon from "@/assets/icons/white-cross.png";
 import audioIcon from "@/assets/icons/headphones.png";
 import cantDisplay from "@/assets/icons/eye-crossed.png";
 const props = defineProps({
