@@ -1,6 +1,7 @@
 <script setup>
     import { ref } from "vue";
     import UserIcon from "@/assets/icons/circle-user.png";
+    import LogoutIcon from "@/assets/icons/user-logout.png";
     const showDropdown = ref(false);
     function toggleDropDown() {
         showDropdown.value = !showDropdown.value;
@@ -31,7 +32,10 @@
             @click="toggleDropDown"
         />
         <div v-if="showDropdown" class="dropdown">
-            <button class="logout-button" @click="handleLogout">Logga ut</button>
+            <button class="userdropdown-button" @click="handleLogout">
+                <img :src="LogoutIcon" alt="Logout icon" class="dropdown-icon" />
+                Logga ut
+            </button>
         </div>
     </div>
 </template>
@@ -45,7 +49,16 @@
         width: 32px;
         height: 32px;
         cursor: pointer;
-        transition: opacity 0.2s;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        transition: border-color 0.2s, transform 0.2s;
+    }
+    .user-icon:hover{
+        border-color: #ccc;
+    }
+    .user-icon:active{
+        border-color: #b1b1b1;
+        transform: scale(0.92);
     }
     .dropdown{
         position: absolute;
@@ -55,10 +68,9 @@
         border: 1px solid #ccc;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        min-width: 100px;
         z-index: 1000;
     }
-    .logout-button {
+    .userdropdown-button {
         width: 100%;
         padding: 10px 16px;
         font-size: 1em;
@@ -67,8 +79,20 @@
         background: #ffffff;
         border-radius: 8px;
         transition: background-color 0.2s;
+        font-family: inherit;
+        color: #444746;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
     }
-    .logout-button:hover{
+    .userdropdown-button:hover{
         background-color: #f0f0f0;
+    }
+    .dropdown-icon {
+        width: 1.5em;
+        height: 1.5em;
+        margin-right: 8px;
+        vertical-align: middle;
     }
 </style>
