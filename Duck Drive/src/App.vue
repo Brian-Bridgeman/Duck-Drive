@@ -3,17 +3,6 @@ import Sidebar from "./components/Sidebar.vue";
 import FileArea from "./components/FileArea.vue";
 import SearchBar from "./components/SearchBar.vue";
 import LoginForm from "./components/LoginForm.vue";
-import trashIcon from "@/assets/icons/trash.png";
-import downloadIcon from "@/assets/icons/download.png";
-import imageIcon from "@/assets/icons/picture.png";
-import audioIcon from "@/assets/icons/headphones.png";
-import fileIcon from "@/assets/icons/file.png";
-import pdfIcon from "@/assets/icons/file-pdf.png";
-import zipIcon from "@/assets/icons/file-zipper.png";
-import videoIcon from "@/assets/icons/clapperboard.png";
-import documentIcon from "@/assets/icons/document.png";
-import fileEditIcon from "@/assets/icons/pencil.png";
-import folderIcon from "@/assets/icons/folder.png";
 import { ref, provide, onMounted } from "vue";
 import { useDark, useToggle } from "@vueuse/core";
 import UserDropdown from "./components/UserDropdown.vue";
@@ -70,7 +59,7 @@ onMounted(() => {
           </label>
           <UserDropdown />
         </div>
-          
+
         <main class="main-content">
           <FileArea :search-query="searchQuery" ref="fileAreaRef" />
         </main>
@@ -92,7 +81,7 @@ body {
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
 }
-.header-bar{
+.header-bar {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -199,6 +188,9 @@ input:checked + .slider:before {
 /* Dark and light mode styling */
 
 [color-scheme="dark"] {
+  .main-content {
+    background-color: #131314;
+  }
   .main-content section {
     background-color: #131314;
     color: #e3e3e3;
@@ -212,7 +204,10 @@ input:checked + .slider:before {
   .main-content .file-component.selected:hover {
     background-color: #0f5682;
   }
-  .main-content .file-component .fileBtn {
+  .main-content .file-component .fileBtnIcon {
+    filter: invert();
+  }
+  .main-content .file-component .fileIcon {
     filter: invert();
   }
   .main-content .file-component .fileBtn:hover {
@@ -236,20 +231,67 @@ input:checked + .slider:before {
   .app-container .sidebar-link {
     color: #e3e3e3;
   }
+  .app-container .sidebar-icon {
+    filter: invert();
+  }
   .app-container h1 {
     color: #e3e3e3;
   }
   .app-container .new-button {
     background-color: #37393b;
+    color: #e3e3e3;
+  }
+  .app-container .dropdown-menu {
+    background-color: #1e1f20;
+  }
+  .app-container .menu-item {
+    color: #e3e3e3;
+  }
+  .app-container .icon {
+    filter: invert();
+  }
+  .app-container .menu-item:hover {
+    background-color: #494b4c;
   }
   .app-container .new-button:hover {
     background-color: #494d53;
   }
+  .app-container .plus-icon {
+    filter: invert();
+  }
   .content-wrapper .search-bar {
     background-color: #282a2c;
   }
+  .content-wrapper .search-icon {
+    filter: invert();
+  }
   .content-wrapper .search-input {
     color: #e3e3e3;
+  }
+  .main-content .audioTemplate {
+    background-color: #1f1f1f;
+  }
+  .main-content .cantDisplay {
+    background-color: #1f1f1f;
+  }
+  .content-wrapper .slider {
+    background-color: #282a2c;
+  }
+  .content-wrapper .user-icon {
+    filter: invert();
+  }
+  .content-wrapper .dropdown {
+    border: 1px solid #131314;
+  }
+  .content-wrapper .userdropdown-button {
+    background-color: #1e1f20;
+    color: #e3e3e3;
+  }
+  .content-wrapper .userdropdown-button:hover {
+    background-color: #494b4c;
+  }
+  .content-wrapper .dropdown-icon {
+    filter: invert();
   }
 }
 </style>

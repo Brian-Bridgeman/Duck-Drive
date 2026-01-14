@@ -176,27 +176,24 @@ const fileFormatIcon = computed(() => {
       <span>{{ file.size }}</span>
     </div>
     <div class="split icons">
-      <button
-        @click.stop="onDeleteClick"
-        class="fileBtn"
-        :style="{ backgroundImage: `url(${trashIcon})` }"
-      ></button>
-      <button
-        @click.stop="downloadFile(file.name)"
-        class="fileBtn"
-        :style="{ backgroundImage: `url(${downloadIcon})` }"
-      ></button>
-      <button
-        @click.stop="startEditing"
-        class="fileBtn"
-        :style="{ backgroundImage: `url(${fileEditIcon})` }"
-      ></button>
+      <button @click.stop="onDeleteClick" class="fileBtn">
+        <img class="fileBtnIcon" :src="trashIcon" alt="" />
+      </button>
+      <button @click.stop="downloadFile(file.name)" class="fileBtn">
+        <img class="fileBtnIcon" :src="downloadIcon" alt="" />
+      </button>
+      <button @click.stop="startEditing" class="fileBtn">
+        <img class="fileBtnIcon" :src="fileEditIcon" alt="" />
+      </button>
     </div>
     <a ref="downloadLink" style="display: none"></a>
   </div>
 </template>
 
 <style scoped>
+.fileBtnIcon {
+  width: 20px;
+}
 .filename-input {
   flex: 1;
   margin: 0px;
