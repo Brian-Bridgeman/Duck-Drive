@@ -16,7 +16,7 @@ import fileEditIcon from "@/assets/icons/pencil.png";
 import folderIcon from "@/assets/icons/folder.png";
 import { ref, provide, onMounted } from "vue";
 import { useDark, useToggle } from "@vueuse/core";
-import LogoutButton from "./components/LogoutButton.vue";
+import UserDropdown from "./components/UserDropdown.vue";
 
 const fileAreaRef = ref(null);
 const searchQuery = ref("");
@@ -66,7 +66,7 @@ onMounted(() => {
             <input type="checkbox" @click="toggleDark()" />
             <span class="slider round"></span>
           </label>
-          <LogoutButton />
+          <UserDropdown />
         </div>
           
         <main class="main-content">
