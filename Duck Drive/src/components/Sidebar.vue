@@ -10,6 +10,7 @@ import folderUploadIcon from "@/assets/icons/folder-upload.png";
 const fileInput = ref(null);
 const folderInput = ref(null);
 const refreshFiles = inject("refreshFiles", null);
+const currentPath = inject("currentPath", ref(""));
 const showMenu = ref(false);
 
 function openfilePicker() {
@@ -66,7 +67,12 @@ async function createFolder() {
   const name = prompt("Ange namn för den nya mappen:");
   if (!name) return;
 
-  await fetch("/api/folders", {
+  const params =
+    currentPath && currentPath.value
+      ? `?path=${encodeURIComponent(currentPath.value)}`
+      : "";
+
+  await fetch(`/api/folders${params}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),
