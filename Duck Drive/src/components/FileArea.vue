@@ -161,6 +161,14 @@ function closeFile() {
   isVisible.value = false;
 }
 
+function openFolder(folder) {
+  if (!(folder.isFolder || folder.type === "folder")) return;
+
+  currentPath.value = currentPath.value
+    ? `${currentPath.value}/${folder.name}`
+    : folder.name;
+  fetchFiles();
+}
 const filteredFiles = computed(() => {
   if (!searchQuery.value) {
     return files.value;
