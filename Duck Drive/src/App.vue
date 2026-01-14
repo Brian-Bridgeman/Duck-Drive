@@ -21,6 +21,7 @@ const fileAreaRef = ref(null);
 const searchQuery = ref("");
 const currentUser = ref(null);
 const isAuthenticated = ref(false);
+const currentPath = ref("");
 const isDark = useDark({
   selector: "body",
   attribute: "color-scheme",
@@ -35,6 +36,7 @@ provide("refreshFiles", () => {
   }
 });
 provide("searchQuery", searchQuery);
+provide("currentPath", currentPath);
 async function checkAuth() {
   try {
     const response = await fetch("/api/auth/status");
