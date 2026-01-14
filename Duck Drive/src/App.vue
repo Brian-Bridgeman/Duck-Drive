@@ -15,9 +15,10 @@ provide("refreshFiles", () => {
     fileAreaRef.value.fetchFiles();
   }
 });
+provide("searchQuery", searchQuery);
 async function checkAuth() {
   try {
-    const response = await fetch('/api/auth/status');
+    const response = await fetch("/api/auth/status");
     const data = await response.json();
     isAuthenticated.value = data.authenticated;
     currentUser.value = data.username;

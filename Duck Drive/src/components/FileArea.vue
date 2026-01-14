@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, inject } from "vue";
 import fuzzysort from "fuzzysort";
 import FileRow from "./FileRow.vue";
 import DialogWindow from "./DialogWindow.vue";
@@ -10,9 +10,8 @@ const isDragging = ref(false);
 const fileInput = ref(null);
 const isVisible = ref(false);
 const activeFile = ref(null);
-const props = defineProps({
-  searchQuery: String,
-});
+
+const searchQuery = inject("searchQuery");
 
 function selectFile(filename) {
   selectedFile.value = filename;
@@ -31,7 +30,7 @@ function dragleave() {
 async function drop(e) {
   e.preventDefault();
   isDragging.value = false;
-  
+
   const items = e.dataTransfer.items;
   if (items && items.length && items[0].webkitGetAsEntry) {
     const allFiles = [];
@@ -148,11 +147,11 @@ function closeFile() {
   isVisible.value = false;
 }
 const filteredFiles = computed(() => {
-  if (!props.searchQuery) {
+  if (!searchQuery.value) {
     return files.value;
   }
 
-  const results = fuzzysort.go(props.searchQuery, files.value, {
+  const results = fuzzysort.go(searchQuery.value, files.value, {
     key: "name",
     threshold: -10000,
   });
