@@ -213,8 +213,8 @@ defineExpose({ fetchFiles });
       <DialogWindow @close="closeFile" :file="activeFile" />
     </div>
     <div>
-      <div class="navigation">
-        <button @click="goBack" :disabled="!currentPath">Tillbaka</button>
+      <div class="navigation" v-if="currentPath">
+        <button @click="goBack">Tillbaka</button>
         <span class="path-label">{{ currentPath }}</span>
       </div>
       <div class="file-header file-grid">
@@ -277,5 +277,34 @@ defineExpose({ fetchFiles });
 .file-list {
   margin-left: 20px;
   margin-right: 20px;
+}
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 20px 10px 20px;
+}
+.navigation button {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  color: #444746;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 0.9em;
+  box-shadow: 0px 2px 4px #00000026;
+  transition: background-color 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+.navigation button:hover {
+  background-color: #edf1fa;
+  box-shadow: 0px 4px 8px #00000040;
+}
+.navigation button:active {
+  box-shadow: 0px 2px 4px #00000033;
+  transform: scale(0.97);
+}
+.path-label {
+  color: #6b6d71;
+  font-size: 0.9rem;
 }
 </style>
