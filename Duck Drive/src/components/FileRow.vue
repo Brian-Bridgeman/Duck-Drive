@@ -12,7 +12,13 @@ import videoIcon from "@/assets/icons/clapperboard.png";
 import documentIcon from "@/assets/icons/document.png";
 import fileEditIcon from "@/assets/icons/pencil.png";
 import folderIcon from "@/assets/icons/folder.png";
-const emit = defineEmits(["delete", "select", "rename", "visible"]);
+const emit = defineEmits([
+  "delete",
+  "select",
+  "rename",
+  "visible",
+  "open-folder",
+]);
 
 const props = defineProps({
   file: {
@@ -92,6 +98,14 @@ function displayFileContent() {
   emit("visible", props.file);
 }
 
+function handleDoubleClick() {
+  if (props.file.type === "folder" || props.file.isFolder) {
+    emit("open-folder", props.file);
+  } else {
+    displayFileContent();
+  }
+}
+
 const fileFormatIcon = computed(() => {
   switch (props.file.type) {
     case "mp3":
@@ -136,7 +150,7 @@ const fileFormatIcon = computed(() => {
     class="file-component file-grid"
     :class="{ selected }"
     @click.stop="onFileSelect"
-    @dblclick="displayFileContent"
+    @dblclick="handleDoubleClick"
   >
     <div class="split fileName">
       <img class="fileIcon" :src="fileFormatIcon" alt="" />
