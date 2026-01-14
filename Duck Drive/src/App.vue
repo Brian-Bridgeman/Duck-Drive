@@ -183,6 +183,8 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+@media (max-width: 768px) {
+}
 /* Dark and light mode styling */
 
 [color-scheme="dark"] {
