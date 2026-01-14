@@ -184,6 +184,15 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 768px) {
+  .header-bar {
+    gap: 0px;
+    justify-content: right;
+    max-width: 70%;
+    margin-left: 2em;
+  }
+  .header-bar .switch {
+    margin-left: 0;
+  }
 }
 /* Dark and light mode styling */
 
