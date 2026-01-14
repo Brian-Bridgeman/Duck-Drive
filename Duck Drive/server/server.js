@@ -55,6 +55,15 @@ function authMiddleware(req, res, next) {
   }
 }
 
+function resolveUserPath(req, relativePath = "") {
+  const baseFolder = path.resolve(`./server/files/${req.session.userId}`);
+  const target = path.resolve(path.join(baseFolder, relativePath));
+  if (!target.startsWith(baseFolder)) {
+    throw new Error("Invalid path");
+  }
+  return target;
+}
+
 app.post("/api/register", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -115,11 +124,11 @@ app.get("/api/auth/status", (req, res) => {
 
 app.get("/api/files", authMiddleware, async (req, res) => {
   try {
-    const userFolder = `./server/files/${req.session.userId}`;
+    const userFolder = resolveUserPath(req, req.query.path || "");
     const items = await fs.promises.readdir(userFolder);
     const itemList = await Promise.all(
       items.map(async (itemName) => {
-        const itemPath = `${userFolder}/${itemName}`;
+        const itemPath = path.join(userFolder, itemName);
         const stats = await fs.promises.stat(itemPath);
         const isDirectory = stats.isDirectory();
 
@@ -155,8 +164,8 @@ app.get("/api/files", authMiddleware, async (req, res) => {
 app.get("/api/files/:filename", authMiddleware, async (req, res) => {
   try {
     const filename = path.basename(req.params.filename);
-    const userFolder = `./server/files/${req.session.userId}`;
-    const filepath = path.resolve(`${userFolder}/${filename}`);
+    const relative = path.join(req.query.path || "", filename);
+    const filepath = resolveUserPath(req, relative);
 
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ error: "File not found" });
@@ -237,8 +246,8 @@ app.post("/api/folders", authMiddleware, async (req, res) => {
     if (!folderName) {
       return res.status(400).json({ error: "Folder name is required" });
     }
-    const userFolder = `./server/files/${req.session.userId}`;
-    const folderPath = path.resolve(`${userFolder}/${folderName}`);
+    const baseFolder = resolveUserPath(req, req.query.path || "");
+    const folderPath = path.join(baseFolder, folderName);
     if (fs.existsSync(folderPath)) {
       return res.status(409).json({ error: "Folder already exists" });
     }
@@ -256,13 +265,13 @@ app.put("/api/files/:filename", authMiddleware, async (req, res) => {
     if (!newFileNameInput) {
       return res.status(400).json({ error: "New file name is required" });
     }
-    const userFolder = `./server/files/${req.session.userId}`;
+    const userFolder = resolveUserPath(req, req.query.path || "");
     const extension = path.extname(oldFileName);
     const newFileName = newFileNameInput.endsWith(extension)
       ? newFileNameInput
       : newFileNameInput + extension;
-    const oldFilePath = path.resolve(`${userFolder}/${oldFileName}`);
-    const newFilePath = path.resolve(`${userFolder}/${newFileName}`);
+    const oldFilePath = path.join(userFolder, oldFileName);
+    const newFilePath = path.join(userFolder, newFileName);
     if (!fs.existsSync(oldFilePath)) {
       return res.status(404).json({ error: "File not found" });
     }
@@ -284,8 +293,8 @@ app.put("/api/files/:filename", authMiddleware, async (req, res) => {
 app.delete("/api/files/:filename", authMiddleware, async (req, res) => {
   try {
     const filename = path.basename(req.params.filename);
-    const userFolder = `./server/files/${req.session.userId}`;
-    const filepath = path.resolve(`${userFolder}/${filename}`);
+    const userFolder = resolveUserPath(req, req.query.path || "");
+    const filepath = path.join(userFolder, filename);
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ error: "File not found" });
     }
