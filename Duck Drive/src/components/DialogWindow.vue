@@ -64,7 +64,7 @@ watch(
 </script>
 
 <template>
-  <div class="overlay">
+  <div class="overlay" @click="closeWindow">
     <div class="popup-window">
       <div v-if="isLoading" class="loader">
         <div class="spinner"></div>
