@@ -311,4 +311,17 @@ input:checked + .slider:before {
     filter: invert();
   }
 }
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 5px;
+    margin-right: 2em;
+    margin-bottom: 10px;
+  }
+  .header-bar {
+    padding-right: 1em;
+  }
+  body {
+    overflow-x: hidden;
+  }
+}
 </style>

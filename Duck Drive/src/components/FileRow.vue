@@ -267,4 +267,34 @@ const fileFormatIcon = computed(() => {
   margin: 10px;
   user-select: none;
 }
+@media (max-width: 768px) {
+  .file-grid {
+    grid-template-columns: 2fr 1fr auto;
+  }
+  .fileIcon {
+    width: 16px;
+    margin: 5px;
+  }
+  .fileBtn {
+    width: 30px;
+    height: 30px;
+    background-size: 16px 16px;
+  }
+  .split{
+    padding: 5px 2px;
+  }
+  .split:nth-child(2) {
+    display: none;
+  }
+  .file-component {
+    font-size: 0.9rem;
+    padding: 0;
+    margin: 0;
+  }
+  .icons{
+    gap: 5px;
+    padding-right: 5px;
+    justify-content: flex-start;
+  }
+}
 </style>

@@ -231,7 +231,7 @@ defineExpose({ fetchFiles });
       </div>
       <div class="file-header file-grid">
         <span>Name</span>
-        <span>Owner</span>
+        <span class="owner-text">Owner</span>
         <span>Last modified</span>
         <span>Size</span>
         <span></span>
@@ -318,5 +318,26 @@ defineExpose({ fetchFiles });
 .path-label {
   color: #6b6d71;
   font-size: 0.9rem;
+}
+@media (max-width: 768px) {
+  .dropzone-container {
+    padding: 0.5rem;
+  }
+  .file-header{
+    padding: 8px 5px;
+  }
+  .file-header,
+  .file-list,
+  .navigation {
+    margin-left:  5px;
+    margin-right: 5px;
+  }
+  .file-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 5px;
+  }
+  .owner-text{
+    display: none;
+  }
 }
 </style>
