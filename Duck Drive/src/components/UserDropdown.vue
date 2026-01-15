@@ -2,10 +2,15 @@
 import { ref } from "vue";
 import UserIcon from "@/assets/icons/circle-user.png";
 import LogoutIcon from "@/assets/icons/user-logout.png";
+import { onClickOutside } from "@vueuse/core";
 const showDropdown = ref(false);
+const dropdownRef = ref(null);
 function toggleDropDown() {
   showDropdown.value = !showDropdown.value;
 }
+onClickOutside(dropdownRef, () => {
+  showDropdown.value = false;
+});
 async function handleLogout() {
   try {
     const response = await fetch("/api/logout", {
@@ -23,7 +28,7 @@ async function handleLogout() {
 }
 </script>
 <template>
-  <div class="logout-section">
+  <div class="logout-section" ref="dropdownRef">
     <img
       :src="UserIcon"
       alt="User icon"
