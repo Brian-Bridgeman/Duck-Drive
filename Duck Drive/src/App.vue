@@ -230,6 +230,12 @@ input:checked + .slider:before {
   .main-content .file-header {
     color: #e3e3e3;
   }
+  .app-container .borgir {
+    background-color: #303131;
+  }
+  .app-container .bar {
+    background-color: #e3e3e3;
+  }
   .app-container {
     background-color: #1b1b1b;
   }
