@@ -6,6 +6,7 @@ import plusIcon from "@/assets/icons/plus.png";
 import addFolderIcon from "@/assets/icons/folder-plus-circle.png";
 import fileUploadIcon from "@/assets/icons/file-upload.png";
 import folderUploadIcon from "@/assets/icons/folder-upload.png";
+import { onClickOutside } from "@vueuse/core";
 
 const fileInput = ref(null);
 const folderInput = ref(null);
@@ -13,6 +14,11 @@ const refreshFiles = inject("refreshFiles", null);
 const currentPath = inject("currentPath", ref(""));
 const showMenu = ref(false);
 const sidebarOpen = ref(false);
+const dropdownRef = ref(null);
+
+onClickOutside(dropdownRef, () => {
+  showMenu.value = false;
+});
 
 function openfilePicker() {
   fileInput.value.click();
@@ -135,7 +141,7 @@ async function createFolder() {
         <button class="new-button" @click="showMenu = !showMenu">
           <img :src="plusIcon" alt="Plus icon" class="plus-icon" /> Nytt
         </button>
-        <div class="dropdown-menu" v-if="showMenu">
+        <div class="dropdown-menu" v-if="showMenu" ref="dropdownRef">
           <button class="menu-item" @click="createFolder">
             <img
               :src="addFolderIcon"
