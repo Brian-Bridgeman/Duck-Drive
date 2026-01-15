@@ -5,7 +5,6 @@ import FileRow from "./FileRow.vue";
 import DialogWindow from "./DialogWindow.vue";
 
 const files = ref([]);
-const selectedFile = ref(null);
 const isDragging = ref(false);
 const fileInput = ref(null);
 const isVisible = ref(false);
@@ -14,8 +13,17 @@ const currentPath = inject("currentPath", ref(""));
 
 const searchQuery = inject("searchQuery");
 
+const emit = defineEmits(["select"]);
+
+const props = defineProps({
+  selectedFile: {
+    type: String,
+    default: null,
+  },
+});
+
 function selectFile(filename) {
-  selectedFile.value = filename;
+  emit("select", filename);
 }
 async function onChange(e) {
   await uploadFiles(e.target.files);
@@ -234,7 +242,7 @@ defineExpose({ fetchFiles });
           v-for="file in filteredFiles"
           :key="file.name"
           :file="file"
-          :selected="file.name === selectedFile"
+          :selected="file.name === props.selectedFile"
           @select="selectFile"
           @delete="deleteFile"
           @rename="renameFile"

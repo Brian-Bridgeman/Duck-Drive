@@ -41,7 +41,6 @@ function onDeleteClick() {
 function onFileSelect() {
   emit("select", props.file.name);
 }
-
 function startEditing() {
   onFileSelect();
   isEditing.value = true;
@@ -249,6 +248,9 @@ const fileFormatIcon = computed(() => {
 }
 .file-component.selected {
   background-color: #c2e7ff;
+}
+.file-component.selected:hover {
+  background-color: #b3dbf4;
 }
 .file-component.selected .fileBtn:hover {
   background-color: #aad0e6;

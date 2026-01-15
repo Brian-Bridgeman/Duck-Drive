@@ -12,6 +12,7 @@ const searchQuery = ref("");
 const currentUser = ref(null);
 const isAuthenticated = ref(false);
 const currentPath = ref("");
+const selectedFile = ref(null);
 const isDark = useDark({
   selector: "body",
   attribute: "color-scheme",
@@ -19,7 +20,12 @@ const isDark = useDark({
   valueLight: "light",
 });
 const toggleDark = useToggle(isDark);
-
+function setSelected(filename) {
+  selectedFile.value = filename;
+}
+function cancelSelect() {
+  selectedFile.value = null;
+}
 provide("refreshFiles", () => {
   if (fileAreaRef.value) {
     fileAreaRef.value.fetchFiles();
@@ -48,7 +54,7 @@ onMounted(() => {
 <template>
   <body color-scheme="isDark ? 'dark' : 'light'">
     <LoginForm v-if="!isAuthenticated" @login-success="handleLoginSuccess" />
-    <div class="app-container" v-else>
+    <div class="app-container" @click="cancelSelect()" v-else>
       <Sidebar />
       <div class="content-wrapper">
         <div class="header-bar">
@@ -61,7 +67,12 @@ onMounted(() => {
         </div>
 
         <main class="main-content">
-          <FileArea :search-query="searchQuery" ref="fileAreaRef" />
+          <FileArea
+            @select="setSelected"
+            :selected-file="selectedFile"
+            :search-query="searchQuery"
+            ref="fileAreaRef"
+          />
         </main>
       </div>
     </div>
