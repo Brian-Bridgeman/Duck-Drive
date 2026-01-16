@@ -135,7 +135,12 @@ app.get("/api/files", authMiddleware, async (req, res) => {
         const itemPath = path.join(userFolder, itemName);
         const stats = await fs.promises.stat(itemPath);
         const isDirectory = stats.isDirectory();
-
+        const fileDate = new Date(stats.ctime);
+        const currentDate = new Date();
+        const isCurrentDate =
+          fileDate.getFullYear() === currentDate.getFullYear() &&
+          fileDate.getMonth() === currentDate.getMonth() &&
+          fileDate.getDate() === currentDate.getDate();
         let size;
         if (isDirectory) {
           const folderSize = await getFolderSize(itemPath);
