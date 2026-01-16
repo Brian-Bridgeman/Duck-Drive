@@ -283,7 +283,7 @@ defineExpose({ fetchFiles });
 }
 .file-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 4fr 1fr 1fr 1fr 1fr;
   align-items: center;
 }
 .file-list {
@@ -323,20 +323,25 @@ defineExpose({ fetchFiles });
   .dropzone-container {
     padding: 0.5rem;
   }
-  .file-header{
+  .file-header {
     padding: 8px 5px;
   }
   .file-header,
   .file-list,
   .navigation {
-    margin-left:  5px;
+    margin-left: 5px;
     margin-right: 5px;
   }
   .file-grid {
     grid-template-columns: 2fr 1fr 1fr;
     gap: 5px;
   }
-  .owner-text{
+  .owner-text {
+    display: none;
+  }
+}
+@media (max-width: 1100px) {
+  .owner-text {
     display: none;
   }
 }

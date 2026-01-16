@@ -267,7 +267,7 @@ const fileFormatIcon = computed(() => {
   margin: 10px;
   user-select: none;
 }
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   .file-grid {
     grid-template-columns: 2fr 1fr auto;
   }
