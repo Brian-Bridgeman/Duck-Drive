@@ -230,6 +230,9 @@ input:checked + .slider:before {
   .main-content .file-header {
     color: #e3e3e3;
   }
+  .main-content .cantDisplayIcon {
+    filter: invert();
+  }
   .app-container .borgir {
     background-color: #303131;
   }
