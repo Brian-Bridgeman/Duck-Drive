@@ -147,10 +147,9 @@ app.get("/api/files", authMiddleware, async (req, res) => {
         return {
           name: itemName,
           size: size,
-          uploadDate:
-            stats.birthtime.toLocaleDateString("sv-SE") +
-            " " +
-            stats.birthtime.toLocaleTimeString("sv-SE"),
+          editDate: isCurrentDate
+            ? stats.ctime.toLocaleTimeString("sv-SE")
+            : stats.ctime.toLocaleDateString("sv-SE"),
           type: isDirectory
             ? "folder"
             : itemName.split(".").pop().toLowerCase(),

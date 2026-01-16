@@ -169,7 +169,7 @@ const fileFormatIcon = computed(() => {
       <span>User icon</span>
     </div>
     <div class="split">
-      <span>{{ file.uploadDate }}</span>
+      <span>{{ file.editDate }}</span>
     </div>
     <div class="split">
       <span>{{ file.size }}</span>
@@ -280,7 +280,7 @@ const fileFormatIcon = computed(() => {
     height: 30px;
     background-size: 16px 16px;
   }
-  .split{
+  .split {
     padding: 5px 2px;
   }
   .split:nth-child(2) {
@@ -291,7 +291,7 @@ const fileFormatIcon = computed(() => {
     padding: 0;
     margin: 0;
   }
-  .icons{
+  .icons {
     gap: 5px;
     padding-right: 5px;
     justify-content: flex-start;
