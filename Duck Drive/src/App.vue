@@ -233,6 +233,10 @@ input:checked + .slider:before {
   .main-content .cantDisplayIcon {
     filter: invert();
   }
+  .main-content .dropzone-container.dragging {
+    background-color: #0b293c;
+    outline: 2px solid #4c9ac9;
+  }
   .app-container .borgir {
     background-color: #303131;
   }
