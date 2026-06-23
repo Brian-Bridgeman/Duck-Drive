@@ -15,7 +15,7 @@
 
 ---
 
-## 📖 Om projektet
+##  Om projektet
 
 **Duck Drive** är en komplett fullstack-webbapplikation för fillagring i molnet – tänk *Google Drive*, fast egenutvecklad från grunden. Användaren skapar ett konto, loggar in säkert och kan sedan **ladda upp, organisera, förhandsgranska och ladda ner** sina filer och mappar – allt direkt i webbläsaren.
 
@@ -25,23 +25,23 @@ Projektet visar hela kedjan i en modern webbtjänst – från ett komponentbaser
 
 ---
 
-## ✨ Funktioner
+##  Funktioner
 
-| | Funktion | Beskrivning |
-|---|---|---|
-| 🔐 | **Säker inloggning** | Registrering och inloggning med lösenord som hashas med **bcrypt**. Sessionshantering med skyddade API-routes. |
-| 📤 | **Uppladdning** | Ladda upp filer och hela mappar – via knapp eller **drag & drop** direkt i webbläsaren. |
-| 📁 | **Mappar & navigering** | Skapa mappar, navigera in och ut ur dem och organisera ditt innehåll fritt. |
-| 👁️ | **Förhandsgranskning** | Visa **bilder, video, ljud, PDF och textfiler** direkt i appen utan att ladda ner dem. |
-| ⬇️ | **Nedladdning** | Ladda ner enskilda filer – eller hela mappar paketerade som **.zip**. |
-| ✏️ | **Byt namn & radera** | Hantera dina filer och mappar med några klick. |
-| 🔍 | **Smart sökning** | Snabb sökning med **fuzzy-matchning** som hittar filer även vid felstavning. |
-| 🌗 | **Mörkt & ljust tema** | Växla tema med ett klick – inställningen sparas mellan besök. |
-| 📱 | **Responsiv design** | Fungerar lika bra på mobil som på dator, med anpassad meny. |
+| Funktion | Beskrivning |
+|---|---|
+| **Säker inloggning** | Registrering och inloggning med lösenord som hashas med **bcrypt**. Sessionshantering med skyddade API-routes. |
+| **Uppladdning** | Ladda upp filer och hela mappar – via knapp eller **drag & drop** direkt i webbläsaren. |
+| **Mappar & navigering** | Skapa mappar, navigera in och ut ur dem och organisera ditt innehåll fritt. |
+| **Förhandsgranskning** | Visa **bilder, video, ljud, PDF och textfiler** direkt i appen utan att ladda ner dem. |
+| **Nedladdning** | Ladda ner enskilda filer – eller hela mappar paketerade som **.zip**. |
+| **Byt namn & radera** | Hantera dina filer och mappar med några klick. |
+| **Smart sökning** | Snabb sökning med **fuzzy-matchning** som hittar filer även vid felstavning. |
+| **Mörkt & ljust tema** | Växla tema med ett klick – inställningen sparas mellan besök. |
+| **Responsiv design** | Fungerar lika bra på mobil som på dator, med anpassad meny. |
 
 ---
 
-## 🖼️ Skärmdumpar
+##  Skärmdumpar
 
 ### Inloggning & registrering
 Ren och välkomnande inloggningssida. Användaren kan smidigt växla mellan att logga in och skapa ett nytt konto.
@@ -75,7 +75,7 @@ Hela gränssnittet stödjer ett genomtänkt mörkt tema.
 
 ---
 
-## 🛠️ Teknik
+##  Teknik
 
 **Frontend**
 - [Vue 3](https://vuejs.org/) (Composition API, `<script setup>`)
@@ -92,7 +92,7 @@ Hela gränssnittet stödjer ett genomtänkt mörkt tema.
 
 ---
 
-## 🔒 Säkerhet & arkitektur
+##  Säkerhet & arkitektur
 
 Några av de tekniska beslut som gör appen robust:
 
@@ -103,7 +103,7 @@ Några av de tekniska beslut som gör appen robust:
 
 ---
 
-## 🚀 Kom igång
+##  Kom igång
 
 > Kräver [Node.js](https://nodejs.org/) (v20.19+ eller v22.12+).
 
@@ -134,6 +134,6 @@ npm start       # Backend (Express) på http://localhost:80
 
 <div align="center">
 
-*Byggt med 🦆 och Vue.*
+*Byggt med Vue.*
 
 </div>
